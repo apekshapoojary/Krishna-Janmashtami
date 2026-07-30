@@ -1,0 +1,1050 @@
+// ==========================================
+// KRISHNA JANMASHTAMI WEBSITE - LOGIC (app.js)
+// ==========================================
+
+// Seed Data & Global State
+const INITIAL_COMPETITIONS = [
+  {
+    id: "comp_1",
+    title: "Kanha Fancy Dress Contest",
+    category: "Traditional",
+    date: "2026-08-28T10:00",
+    prize: "1st: ₹5000, 2nd: ₹3000",
+    venue: "College Auditorium",
+    rules: "Open to all students. Participants must bring their own costume, flute, and peacock crown. Presentation time limit is 3 minutes.",
+    approved: true
+  },
+  {
+    id: "comp_2",
+    title: "Dahi Handi Sprint (Pot Breaking)",
+    category: "Traditional",
+    date: "2026-08-28T15:00",
+    prize: "1st: ₹10000, 2nd: ₹5000",
+    venue: "College Playground",
+    rules: "Teams of 5. Maximum height is 3 human tiers. Safety harnesses and crash mats will be provided by the college. The team that breaks the pot in the shortest time wins.",
+    approved: true
+  },
+  {
+    id: "comp_3",
+    title: "Janmashtami Rangoli Artistry",
+    category: "Arts",
+    date: "2026-08-28T11:30",
+    prize: "1st: ₹3000, 2nd: ₹1500",
+    venue: "Main Block Corridors",
+    rules: "Individual or pairs. Time limit: 2 hours. Space provided: 4x4 feet. Stencils are not allowed. Bring your own organic colors.",
+    approved: true
+  },
+  {
+    id: "comp_4",
+    title: "Muralidhara Solo Flute Recital",
+    category: "Musical",
+    date: "2026-08-28T13:30",
+    prize: "1st: ₹4000, 2nd: ₹2000",
+    venue: "Seminar Hall II",
+    rules: "Time limit: 5 minutes. Classical or semi-classical Janmashtami tunes/bhajans are allowed. Shruti box is permitted.",
+    approved: true
+  }
+];
+
+const INITIAL_MEMORIES = [
+  {
+    id: "mem_1",
+    title: "Floral Jhoola Decoration Winner",
+    year: "2025",
+    image: "decor",
+    desc: "The final year B.Sc. students hand-crafted a breathtaking floral swing for Little Krishna, using fresh jasmine, marigolds, and mango leaves. Their attention to detail and traditional patterns secured them the first place."
+  },
+  {
+    id: "mem_2",
+    title: "Historic Dahi Handi Break",
+    year: "2025",
+    image: "dahi-handi",
+    desc: "Reliving the electric atmosphere at the college grounds! After three failed attempts, the 'B.Com Warriors' team formed a flawless 3-tier pyramid and cracked the golden clay pot amidst drenching water and joyful drums."
+  },
+  {
+    id: "mem_3",
+    title: "Traditional Garba & Dandiya Eve",
+    year: "2024",
+    image: "dancing",
+    desc: "A beautiful evening celebration where staff and students dressed in vibrant traditional attire (Chaniya Cholis and Kurtas) danced to rhythmic beats, showcasing college unity and traditional culture."
+  },
+  {
+    id: "mem_4",
+    title: "Little Kanhas Walk",
+    year: "2024",
+    image: "krishna.jpg",
+    desc: "Our annual fancy dress parade featured dozens of cute portrayals of Little Krishna, complete with butter pots, mischief, and charming smiles. Truly a blessing to watch."
+  }
+];
+
+const TEACHINGS = [
+  {
+    text: "You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions.",
+    chapter: "Bhagavad Gita - Chapter 2, Verse 47"
+  },
+  {
+    text: "A man is made by his belief. As he believes, so he is.",
+    chapter: "Bhagavad Gita - Chapter 17, Verse 3"
+  },
+  {
+    text: "Change is the law of the universe. You can be a millionaire, or a pauper in an instant.",
+    chapter: "Bhagavad Gita - Chapter 2, Verse 12"
+  },
+  {
+    text: "Deliver the self by the Self, and do not let the self sink. For the Self is the friend of the self, and the Self is the enemy of the self.",
+    chapter: "Bhagavad Gita - Chapter 6, Verse 5"
+  },
+  {
+    text: "Whatever actions great people perform, common people follow. And whatever standards they set, all the world pursues.",
+    chapter: "Bhagavad Gita - Chapter 3, Verse 21"
+  },
+  {
+    text: "For the soul there is neither birth nor death at any time. It has not come into being, does not come into being, and will not come into being.",
+    chapter: "Bhagavad Gita - Chapter 2, Verse 20"
+  },
+  {
+    text: "Whenever righteousness (dharma) declines and unrighteousness rises, I manifest Myself on Earth.",
+    chapter: "Bhagavad Gita - Chapter 4, Verse 7"
+  }
+];
+
+const MEMORY_IMAGE_MAPPING = {
+  "krishna.jpg": "krishna.jpg",
+  "decor": "https://images.unsplash.com/photo-1561361513-2d000a50f0db?auto=format&fit=crop&w=500&q=80", // Flowers / festival
+  "dahi-handi": "https://images.unsplash.com/photo-1605335198270-b472e389d4fb?auto=format&fit=crop&w=500&q=80", // Indian clay pots
+  "dancing": "https://images.unsplash.com/photo-1605647540924-852290f6b0d5?auto=format&fit=crop&w=500&q=80" // Indian celebration
+};
+
+// State Variables
+let competitions = [];
+let memories = [];
+let registrations = [];
+let currentRole = "student";
+let activeWisdomIndex = 0;
+
+// Web Audio API Synthesizer variables
+let audioCtx = null;
+let musicInterval = null;
+let isMusicPlaying = false;
+const pentatonicScale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25]; // C4, D4, E4, G4, A4, C5 (Raag Bhupali notes)
+
+// Seed data for Users
+const DEFAULT_USERS = [
+  { name: "Principal Admin", email: "admin@hegde.edu", username: "admin", password: "admin", role: "admin" },
+  { name: "Prof. Hegde (HOD)", email: "organiser@hegde.edu", username: "organiser", password: "organiser", role: "organiser" },
+  { name: "Apeksha K.", email: "student@hegde.edu", username: "student", password: "student", role: "student" }
+];
+
+// ==========================================
+// 1. INITIALIZATION & STORAGE
+// ==========================================
+
+function initApp() {
+  // Load data from Local Storage or Seed
+  if (!localStorage.getItem("utsav_competitions")) {
+    localStorage.setItem("utsav_competitions", JSON.stringify(INITIAL_COMPETITIONS));
+  }
+  if (!localStorage.getItem("utsav_memories")) {
+    localStorage.setItem("utsav_memories", JSON.stringify(INITIAL_MEMORIES));
+  }
+  if (!localStorage.getItem("utsav_registrations")) {
+    localStorage.setItem("utsav_registrations", JSON.stringify([]));
+  }
+  if (!localStorage.getItem("utsav_users")) {
+    localStorage.setItem("utsav_users", JSON.stringify(DEFAULT_USERS));
+  }
+
+  competitions = JSON.parse(localStorage.getItem("utsav_competitions"));
+  memories = JSON.parse(localStorage.getItem("utsav_memories"));
+  registrations = JSON.parse(localStorage.getItem("utsav_registrations"));
+
+  // Event Listeners
+  setupEventListeners();
+
+  // Intro Screen Sequence Setup
+  setupIntroSequence();
+}
+
+// ==========================================
+// 2. INTRO SEQUENCE & EVENT HANDLERS
+// ==========================================
+
+function setupIntroSequence() {
+  const enterBtn = document.getElementById("enter-site-btn");
+  const skipBtn = document.getElementById("skip-intro-btn");
+  const introOverlay = document.getElementById("intro-overlay");
+  const authOverlay = document.getElementById("auth-overlay");
+  const appRoot = document.getElementById("app-root");
+
+  const enterAction = () => {
+    introOverlay.style.transform = "translateY(-100vh)";
+    startAmbientMusic();
+    setTimeout(() => {
+      introOverlay.style.display = "none";
+      
+      // Check active user session
+      const currentUser = JSON.parse(localStorage.getItem("utsav_current_user"));
+      if (currentUser) {
+        appRoot.classList.remove("hidden");
+        showUserProfile(currentUser);
+        switchRole(currentUser.role);
+      } else {
+        authOverlay.classList.remove("hidden");
+      }
+    }, 1200);
+  };
+
+  enterBtn.addEventListener("click", enterAction);
+  skipBtn.addEventListener("click", enterAction);
+}
+
+function setupEventListeners() {
+  // Auth Tab Buttons switcher
+  const tabLoginBtn = document.getElementById("tab-login-btn");
+  const tabRegisterBtn = document.getElementById("tab-register-btn");
+  const loginForm = document.getElementById("login-form");
+  const registerForm = document.getElementById("register-form");
+
+  tabLoginBtn.addEventListener("click", () => {
+    tabLoginBtn.classList.add("active");
+    tabRegisterBtn.classList.remove("active");
+    loginForm.classList.add("active");
+    registerForm.classList.remove("active");
+  });
+
+  tabRegisterBtn.addEventListener("click", () => {
+    tabRegisterBtn.classList.add("active");
+    tabLoginBtn.classList.remove("active");
+    registerForm.classList.add("active");
+    loginForm.classList.remove("active");
+  });
+
+  // Auth Forms submission
+  loginForm.addEventListener("submit", handleUserLogin);
+  registerForm.addEventListener("submit", handleUserRegister);
+
+  // Logout button
+  document.getElementById("logout-btn").addEventListener("click", handleUserLogout);
+
+  // Tab systems for Student, Organiser, and Admin Portals
+  const tabContainers = [
+    { module: "module-student", selector: "#module-student .tab-btn" },
+    { module: "module-organiser", selector: "#module-organiser .tab-btn" },
+    { module: "module-admin", selector: "#module-admin .tab-btn" }
+  ];
+
+  tabContainers.forEach(container => {
+    const tabs = document.querySelectorAll(container.selector);
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        const targetTabId = tab.getAttribute("data-tab");
+        const parentModule = document.getElementById(container.module);
+        
+        // Deactivate old tabs & contents in this module
+        parentModule.querySelectorAll(".tab-btn").forEach(t => t.classList.remove("active"));
+        parentModule.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+        // Activate selected tab & content
+        tab.classList.add("active");
+        const targetContent = document.getElementById(targetTabId);
+        if (targetContent) targetContent.classList.add("active");
+      });
+    });
+  });
+
+  // Memory Lane category filter
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const filter = btn.getAttribute("data-filter");
+      renderMemoryGallery(filter);
+    });
+  });
+
+  // Next Wisdom quote button
+  document.getElementById("next-wisdom-btn").addEventListener("click", cycleWisdom);
+  
+  // Interactive elements hover/click playfulness
+  const matka = document.getElementById("interactive-matka");
+  matka.addEventListener("click", () => {
+    cycleWisdom();
+    playFluteTone(600, 0.1, 0.2); // high note pot crack chime
+    matka.style.transform = "translateZ(60px) rotate(-15deg) scale(1.1)";
+    setTimeout(() => {
+      matka.style.transform = "translateZ(60px) rotate(0deg) scale(1)";
+    }, 400);
+  });
+
+  const flute = document.getElementById("interactive-flute");
+  flute.addEventListener("mouseenter", () => {
+    playShortFluteRiff();
+  });
+  flute.addEventListener("click", () => {
+    playShortFluteRiff();
+  });
+
+  // Ambient music toggle
+  document.getElementById("music-toggle-btn").addEventListener("click", toggleMusic);
+
+  // Core student forms submit
+  document.getElementById("student-registration-form").addEventListener("submit", handleStudentRegistration);
+  document.getElementById("add-competition-form").addEventListener("submit", handleOrganiserAddCompetition);
+  document.getElementById("add-memory-form").addEventListener("submit", handleOrganiserAddMemory);
+  
+  // Organiser event select filter for rosters
+  document.getElementById("organiser-comp-select").addEventListener("change", (e) => {
+    renderOrganiserRoster(e.target.value);
+  });
+
+  // Admin Controls
+  document.getElementById("admin-export-csv").addEventListener("click", exportRegistrationsCSV);
+  document.getElementById("admin-clear-data").addEventListener("click", resetAllData);
+
+  // Modal close
+  document.getElementById("close-modal-btn").addEventListener("click", closeModal);
+  window.addEventListener("click", (e) => {
+    if (e.target === document.getElementById("registration-modal")) {
+      closeModal();
+    }
+  });
+
+  // Parallax 3D effect on mouse movement in the Hero arena
+  const playground = document.querySelector(".hero-3d-playground");
+  const scene = document.querySelector(".interactive-3d-scene");
+  
+  if (playground && scene) {
+    playground.addEventListener("mousemove", (e) => {
+      const rect = playground.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      
+      const rotX = (y / rect.height) * -30;
+      const rotY = (x / rect.width) * 30;
+      
+      scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    });
+
+    playground.addEventListener("mouseleave", () => {
+      scene.style.transform = "rotateX(0deg) rotateY(0deg)";
+    });
+  }
+}
+
+// ==========================================
+// 3. AUTHENTICATION & SESSION LOGIC
+// ==========================================
+
+function handleUserLogin(e) {
+  e.preventDefault();
+  const role = document.getElementById("login-role").value;
+  const usernameOrEmail = document.getElementById("login-username").value.trim().toLowerCase();
+  const password = document.getElementById("login-password").value;
+
+  const users = JSON.parse(localStorage.getItem("utsav_users")) || [];
+  const foundUser = users.find(u => 
+    (u.username.toLowerCase() === usernameOrEmail || u.email.toLowerCase() === usernameOrEmail) && 
+    u.password === password && 
+    u.role === role
+  );
+
+  if (foundUser) {
+    localStorage.setItem("utsav_current_user", JSON.stringify(foundUser));
+    
+    // Play success chime
+    playFluteTone(523.25, 0.15, 0.4);
+    
+    // Hide auth page, reveal app dashboard
+    document.getElementById("auth-overlay").classList.add("hidden");
+    document.getElementById("app-root").classList.remove("hidden");
+    
+    showUserProfile(foundUser);
+    switchRole(role);
+    
+    document.getElementById("login-form").reset();
+  } else {
+    alert("Invalid credentials or role selection! Please check your details and try again.");
+  }
+}
+
+function handleUserRegister(e) {
+  e.preventDefault();
+  const role = document.getElementById("reg-role-type").value;
+  const email = document.getElementById("reg-user-email").value.trim();
+  const username = document.getElementById("reg-user-username").value.trim().toLowerCase();
+  const password = document.getElementById("reg-user-password").value;
+
+  if (!email || !username || !password) {
+    alert("Please fill in all the required fields.");
+    return;
+  }
+
+  const name = username.charAt(0).toUpperCase() + username.slice(1);
+
+  const users = JSON.parse(localStorage.getItem("utsav_users")) || [];
+  
+  if (users.some(u => u.username.toLowerCase() === username || u.email.toLowerCase() === email)) {
+    alert("Username or Email is already registered!");
+    return;
+  }
+
+  const newUser = { name, email, username, password, role };
+  users.push(newUser);
+  localStorage.setItem("utsav_users", JSON.stringify(users));
+
+  playFluteTone(440.00, 0.15, 0.45); // Success note
+
+  alert("Registration successful! You can now log in with your credentials.");
+  document.getElementById("register-form").reset();
+
+  // Toggle to Login Tab
+  document.getElementById("tab-login-btn").click();
+  document.getElementById("login-username").value = username;
+  document.getElementById("login-role").value = role;
+}
+
+function handleUserLogout() {
+  if (!confirm("Are you sure you want to log out?")) return;
+
+  localStorage.removeItem("utsav_current_user");
+  stopAmbientMusic();
+
+  // Hide app and show login
+  document.getElementById("app-root").classList.add("hidden");
+  document.getElementById("user-profile-badge").classList.add("hidden");
+  document.getElementById("auth-overlay").classList.remove("hidden");
+}
+
+function showUserProfile(user) {
+  const profileBadge = document.getElementById("user-profile-badge");
+  const displayName = document.getElementById("user-display-name");
+  const displayRole = document.getElementById("user-display-role");
+
+  displayName.textContent = user.name;
+  displayRole.textContent = user.role === "admin" ? "Principal Admin" : user.role === "organiser" ? "Utsav Organiser" : "Student";
+  displayRole.className = `user-role-tag ${user.role}-role`;
+
+  profileBadge.classList.remove("hidden");
+}
+
+function fillDemoCredentials(role) {
+  const roleSelect = document.getElementById("login-role");
+  const usernameInput = document.getElementById("login-username");
+  const passwordInput = document.getElementById("login-password");
+
+  roleSelect.value = role;
+  usernameInput.value = role; // demo username is same as role
+  passwordInput.value = role; // demo password is same as role
+  
+  playFluteTone(392.00, 0.1, 0.25); // sound feedback
+}
+
+function switchRole(role) {
+  currentRole = role;
+  
+  // Hide all modules, show selected
+  document.querySelectorAll(".role-module").forEach(mod => mod.classList.remove("active"));
+  const targetModule = document.getElementById(`module-${role}`);
+  if (targetModule) {
+    targetModule.classList.add("active");
+  }
+
+  // Re-sync components for the module
+  if (role === "student") {
+    renderStudentPortal();
+  } else if (role === "organiser") {
+    renderOrganiserPortal();
+  } else if (role === "admin") {
+    renderAdminPortal();
+  }
+}
+
+// ==========================================
+// 4. STUDENT PORTAL LOGIC
+// ==========================================
+
+function renderStudentPortal() {
+  // Render Approved Competitions
+  const compGrid = document.getElementById("student-competitions-list");
+  compGrid.innerHTML = "";
+  
+  const approvedComps = competitions.filter(c => c.approved);
+
+  if (approvedComps.length === 0) {
+    compGrid.innerHTML = `<p class="no-data-msg">No active competitions available. Check back soon!</p>`;
+  } else {
+    approvedComps.forEach(comp => {
+      const card = document.createElement("div");
+      card.className = "traditional-card";
+      
+      // Set image category background
+      const categoryClass = comp.category.toLowerCase();
+      const imageSrc = MEMORY_IMAGE_MAPPING[categoryClass] || MEMORY_IMAGE_MAPPING["krishna.jpg"];
+      
+      // Check if student registered
+      const isRegistered = registrations.some(r => r.compId === comp.id);
+      const regBtnText = isRegistered ? `<i class="fa-solid fa-check"></i> Registered` : `<i class="fa-solid fa-id-card"></i> Register Now`;
+
+      card.innerHTML = `
+        <div class="card-header-pic">
+          <img src="${imageSrc}" class="card-img" alt="${comp.title}">
+          <span class="card-badge ${categoryClass}">${comp.category}</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">${comp.title}</h3>
+          <p class="card-desc">${comp.rules}</p>
+          <div class="card-meta-list">
+            <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> <span>${formatDate(comp.date)}</span></div>
+            <div class="meta-item"><i class="fa-solid fa-map-pin"></i> <span>${comp.venue}</span></div>
+            <div class="meta-item"><i class="fa-solid fa-gift"></i> <span>${comp.prize}</span></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="card-action-btn" ${isRegistered ? 'disabled' : ''} onclick="openRegistrationModal('${comp.id}')">
+            ${regBtnText}
+          </button>
+        </div>
+      `;
+      compGrid.appendChild(card);
+    });
+  }
+
+  // Render Memories list
+  renderMemoryGallery("all");
+
+  // Render Student's My Registrations tab
+  const studentRegsBody = document.getElementById("student-my-registrations-list");
+  studentRegsBody.innerHTML = "";
+
+  if (registrations.length === 0) {
+    studentRegsBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-gray);">You have not registered for any events yet.</td></tr>`;
+  } else {
+    registrations.forEach(reg => {
+      const comp = competitions.find(c => c.id === reg.compId);
+      const compTitle = comp ? comp.title : "Unknown Competition";
+      const statusLabel = comp && comp.approved ? "Approved" : "Pending Approval";
+      const badgeClass = statusLabel.toLowerCase();
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${reg.studentName}</td>
+        <td>${reg.rollNo}</td>
+        <td>${reg.studentClass}</td>
+        <td>${compTitle}</td>
+        <td>${formatDate(reg.dateRegistered)}</td>
+        <td><span class="status-badge ${badgeClass}">${statusLabel}</span></td>
+      `;
+      studentRegsBody.appendChild(row);
+    });
+  }
+}
+
+function renderMemoryGallery(filter) {
+  const memoryGrid = document.getElementById("student-memories-list");
+  memoryGrid.innerHTML = "";
+
+  const filteredMemories = filter === "all" ? memories : memories.filter(m => m.year === filter);
+
+  if (filteredMemories.length === 0) {
+    memoryGrid.innerHTML = `<p class="no-data-msg">No memories archived for this year.</p>`;
+  } else {
+    filteredMemories.forEach(mem => {
+      const card = document.createElement("div");
+      card.className = "memory-card";
+      
+      const imgUrl = MEMORY_IMAGE_MAPPING[mem.image] || mem.image || MEMORY_IMAGE_MAPPING["krishna.jpg"];
+
+      card.innerHTML = `
+        <div class="card-header-pic">
+          <img src="${imgUrl}" class="card-img" alt="${mem.title}">
+        </div>
+        <div class="memory-body">
+          <div class="memory-title-row">
+            <h3 class="card-title">${mem.title}</h3>
+            <span class="memory-year-badge">${mem.year}</span>
+          </div>
+          <p class="card-desc">${mem.desc}</p>
+        </div>
+      `;
+      memoryGrid.appendChild(card);
+    });
+  }
+}
+
+// ==========================================
+// 5. REGISTRATION MODAL
+// ==========================================
+
+function openRegistrationModal(compId) {
+  const comp = competitions.find(c => c.id === compId);
+  if (!comp) return;
+
+  document.getElementById("reg-comp-id").value = compId;
+  document.getElementById("modal-comp-title").textContent = comp.title;
+  
+  const modal = document.getElementById("registration-modal");
+  modal.classList.remove("hidden");
+}
+
+function closeModal() {
+  document.getElementById("registration-modal").classList.add("hidden");
+  document.getElementById("student-registration-form").reset();
+}
+
+function handleStudentRegistration(e) {
+  e.preventDefault();
+  
+  const compId = document.getElementById("reg-comp-id").value;
+  const studentName = document.getElementById("reg-student-name").value;
+  const rollNo = document.getElementById("reg-roll-no").value;
+  const studentClass = document.getElementById("reg-class").value;
+  const email = document.getElementById("reg-email").value;
+  const phone = document.getElementById("reg-phone").value;
+
+  // Add validation
+  if (!studentName || !rollNo || !studentClass || !email || !phone) {
+    alert("Please fill in all the required fields.");
+    return;
+  }
+
+  // Create new registration
+  const newReg = {
+    id: "reg_" + Date.now(),
+    compId,
+    studentName,
+    rollNo,
+    studentClass,
+    email,
+    phone,
+    dateRegistered: new Date().toISOString()
+  };
+
+  registrations.push(newReg);
+  localStorage.setItem("utsav_registrations", JSON.stringify(registrations));
+  
+  playFluteTone(523.25, 0.15, 0.4); // Success high C note
+
+  alert("Congratulations! You have successfully registered for the event.");
+  closeModal();
+  renderStudentPortal();
+}
+
+// ==========================================
+// 6. ORGANISER PORTAL LOGIC
+// ==========================================
+
+function renderOrganiserPortal() {
+  // Populate the rosters select dropdown filter
+  const selectComp = document.getElementById("organiser-comp-select");
+  selectComp.innerHTML = "";
+
+  const approvedComps = competitions.filter(c => c.approved);
+  
+  if (approvedComps.length === 0) {
+    const opt = document.createElement("option");
+    opt.textContent = "No approved events";
+    selectComp.appendChild(opt);
+    renderOrganiserRoster(null);
+  } else {
+    approvedComps.forEach(comp => {
+      const opt = document.createElement("option");
+      opt.value = comp.id;
+      opt.textContent = comp.title;
+      selectComp.appendChild(opt);
+    });
+    // Trigger render on first item
+    renderOrganiserRoster(approvedComps[0].id);
+  }
+}
+
+function renderOrganiserRoster(compId) {
+  const rosterBody = document.getElementById("organiser-roster-list");
+  rosterBody.innerHTML = "";
+
+  if (!compId) {
+    rosterBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-gray);">No competition selected or available.</td></tr>`;
+    return;
+  }
+
+  const filteredRegs = registrations.filter(r => r.compId === compId);
+
+  if (filteredRegs.length === 0) {
+    rosterBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-gray);">No students have registered for this competition yet.</td></tr>`;
+  } else {
+    filteredRegs.forEach(reg => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${reg.rollNo}</td>
+        <td>${reg.studentName}</td>
+        <td>${reg.studentClass}</td>
+        <td>${reg.email}</td>
+        <td>${reg.phone}</td>
+        <td>${formatDate(reg.dateRegistered)}</td>
+      `;
+      rosterBody.appendChild(row);
+    });
+  }
+}
+
+function handleOrganiserAddCompetition(e) {
+  e.preventDefault();
+
+  const title = document.getElementById("comp-title").value;
+  const category = document.getElementById("comp-category").value;
+  const date = document.getElementById("comp-date").value;
+  const prize = document.getElementById("comp-prize").value;
+  const venue = document.getElementById("comp-venue").value;
+  const rules = document.getElementById("comp-rules").value;
+
+  const newComp = {
+    id: "comp_" + Date.now(),
+    title,
+    category,
+    date,
+    prize,
+    venue,
+    rules,
+    approved: false // Proposals from organisers require admin approval
+  };
+
+  competitions.push(newComp);
+  localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
+
+  playFluteTone(329.63, 0.2, 0.4); // sweet tone
+
+  alert("Competition proposed successfully! It has been sent to the Admin for approval.");
+  document.getElementById("add-competition-form").reset();
+  renderOrganiserPortal();
+}
+
+function handleOrganiserAddMemory(e) {
+  e.preventDefault();
+
+  const title = document.getElementById("mem-title").value;
+  const year = document.getElementById("mem-year").value;
+  const image = document.getElementById("mem-image-select").value;
+  const desc = document.getElementById("mem-desc").value;
+
+  const newMemory = {
+    id: "mem_" + Date.now(),
+    title,
+    year,
+    image,
+    desc
+  };
+
+  memories.push(newMemory);
+  localStorage.setItem("utsav_memories", JSON.stringify(memories));
+
+  playFluteTone(440.00, 0.15, 0.45); // cheerful tone
+
+  alert("Success! Previous year memory archived successfully.");
+  document.getElementById("add-memory-form").reset();
+  
+  // Direct sync
+  renderMemoryGallery("all");
+}
+
+// ==========================================
+// 7. ADMIN PORTAL LOGIC
+// ==========================================
+
+function renderAdminPortal() {
+  // Sync Stats Counters
+  document.getElementById("stat-total-registrations").textContent = registrations.length;
+  
+  const activeComps = competitions.filter(c => c.approved);
+  document.getElementById("stat-total-competitions").textContent = activeComps.length;
+
+  const pendingComps = competitions.filter(c => !c.approved);
+  document.getElementById("stat-pending-proposals").textContent = pendingComps.length;
+
+  // Render Proposals Approval View
+  const proposalsContainer = document.getElementById("admin-proposals-list");
+  proposalsContainer.innerHTML = "";
+
+  if (pendingComps.length === 0) {
+    proposalsContainer.innerHTML = `<p class="no-data-msg" style="text-align: center; grid-column: 1/-1;"><i class="fa-solid fa-clipboard-check"></i> All proposed competitions have been reviewed.</p>`;
+  } else {
+    pendingComps.forEach(comp => {
+      const card = document.createElement("div");
+      card.className = "proposal-card";
+      
+      card.innerHTML = `
+        <div class="proposal-info">
+          <h4 class="proposal-title">${comp.title}</h4>
+          <div class="proposal-meta-row">
+            <span><strong>Category:</strong> ${comp.category}</span>
+            <span><strong>Date:</strong> ${formatDate(comp.date)}</span>
+            <span><strong>Venue:</strong> ${comp.venue}</span>
+            <span><strong>Prize:</strong> ${comp.prize}</span>
+          </div>
+          <p class="proposal-desc">${comp.rules}</p>
+        </div>
+        <div class="proposal-actions">
+          <button class="admin-approve-btn" onclick="approveCompetition('${comp.id}')">
+            <i class="fa-solid fa-check"></i> Approve
+          </button>
+          <button class="admin-reject-btn" onclick="rejectCompetition('${comp.id}')">
+            <i class="fa-solid fa-xmark"></i> Reject
+          </button>
+        </div>
+      `;
+      proposalsContainer.appendChild(card);
+    });
+  }
+
+  // Render Admin Master Registrations Table
+  const masterTableBody = document.getElementById("admin-master-registrations-list");
+  masterTableBody.innerHTML = "";
+
+  if (registrations.length === 0) {
+    masterTableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--color-gray);">No registrations recorded yet.</td></tr>`;
+  } else {
+    registrations.forEach(reg => {
+      const comp = competitions.find(c => c.id === reg.compId);
+      const compTitle = comp ? comp.title : "Deleted Competition";
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${reg.rollNo}</td>
+        <td>${reg.studentName}</td>
+        <td>${reg.studentClass}</td>
+        <td>${compTitle}</td>
+        <td>${reg.email}</td>
+        <td>${reg.phone}</td>
+        <td>${formatDate(reg.dateRegistered)}</td>
+      `;
+      masterTableBody.appendChild(row);
+    });
+  }
+}
+
+function approveCompetition(compId) {
+  const compIndex = competitions.findIndex(c => c.id === compId);
+  if (compIndex === -1) return;
+
+  competitions[compIndex].approved = true;
+  localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
+  
+  playFluteTone(523.25, 0.1, 0.3); // success note
+  
+  alert("Competition approved and published live!");
+  renderAdminPortal();
+  renderStudentPortal();
+}
+
+function rejectCompetition(compId) {
+  if (!confirm("Are you sure you want to reject and discard this proposed competition?")) return;
+
+  competitions = competitions.filter(c => c.id !== compId);
+  localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
+  
+  playFluteTone(196.00, 0.3, 0.1); // low rejected note
+
+  alert("Competition proposal discarded.");
+  renderAdminPortal();
+}
+
+function exportRegistrationsCSV() {
+  if (registrations.length === 0) {
+    alert("No registrations available to export.");
+    return;
+  }
+
+  // CSV headers
+  let csvContent = "Roll No,Student Name,Class,Competition,Email,Phone,Registration Date\n";
+
+  // CSV rows
+  registrations.forEach(reg => {
+    const comp = competitions.find(c => c.id === reg.compId);
+    const compTitle = comp ? comp.title.replace(/,/g, " ") : "Unknown";
+    const name = reg.studentName.replace(/,/g, " ");
+    const sClass = reg.studentClass.replace(/,/g, " ");
+
+    csvContent += `"${reg.rollNo}","${name}","${sClass}","${compTitle}","${reg.email}","${reg.phone}","${formatDate(reg.dateRegistered)}"\n`;
+  });
+
+  // Download logic
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  
+  link.setAttribute("href", url);
+  link.setAttribute("download", `Janmashtami_Registrations_${new Date().toLocaleDateString()}.csv`);
+  link.style.visibility = "hidden";
+  
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function resetAllData() {
+  if (!confirm("CRITICAL WARNING: This will delete all student registrations, custom memories, and custom proposed competitions, resetting the application to default seed files. Proceed?")) return;
+
+  localStorage.removeItem("utsav_competitions");
+  localStorage.removeItem("utsav_memories");
+  localStorage.removeItem("utsav_registrations");
+
+  initApp();
+  alert("All application data has been reset to defaults.");
+}
+
+// ==========================================
+// 8. OTHER CORE UTILITIES
+// ==========================================
+
+function cycleWisdom() {
+  activeWisdomIndex = (activeWisdomIndex + 1) % TEACHINGS.length;
+  const card = document.getElementById("wisdom-card");
+  const wisdomText = document.getElementById("wisdom-text");
+  const wisdomChapter = document.getElementById("wisdom-chapter");
+
+  // Fade out effect
+  wisdomText.style.opacity = 0;
+  wisdomChapter.style.opacity = 0;
+  
+  setTimeout(() => {
+    wisdomText.textContent = `"${TEACHINGS[activeWisdomIndex].text}"`;
+    wisdomChapter.textContent = TEACHINGS[activeWisdomIndex].chapter;
+    
+    wisdomText.style.opacity = 1;
+    wisdomChapter.style.opacity = 1;
+  }, 250);
+}
+
+function formatDate(isoString) {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  return d.toLocaleString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+// ==========================================
+// 9. WEB AUDIO API SOUND GENERATION
+// ==========================================
+
+function initAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+// Play a simulated flute note
+function playFluteTone(frequency, duration, volume) {
+  try {
+    initAudioContext();
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    const filter = audioCtx.createBiquadFilter();
+
+    osc.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    // Warm flute wave (triangle waves sound breathy and pure, like woodwinds)
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+    // Soft vibrato
+    const lfo = audioCtx.createOscillator();
+    const lfoGain = audioCtx.createGain();
+    lfo.frequency.value = 6; // 6Hz vibrato
+    lfoGain.gain.value = frequency * 0.015; // pitch bend depth
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc.frequency);
+    lfo.start();
+
+    // Filter to soften the attack and tone
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(frequency * 2, audioCtx.currentTime);
+
+    // Amplitude envelope: soft attack, decay, soft release
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + 0.08); // 80ms fade in
+    gainNode.gain.setValueAtTime(volume, audioCtx.currentTime + duration - 0.1);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration); // 100ms fade out
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+    lfo.stop(audioCtx.currentTime + duration);
+  } catch (err) {
+    console.warn("Audio playing blocked or failed", err);
+  }
+}
+
+// Play short 3-note melody sweeps on interactions
+function playShortFluteRiff() {
+  const now = audioCtx ? audioCtx.currentTime : 0;
+  // Play three pentatonic notes ascending
+  playFluteTone(329.63, 0.25, 0.15); // E4
+  setTimeout(() => playFluteTone(392.00, 0.25, 0.15), 180); // G4
+  setTimeout(() => playFluteTone(440.00, 0.4, 0.2), 360); // A4
+}
+
+// Generate continuous ambient flute loops
+function startAmbientMusic() {
+  if (isMusicPlaying) return;
+  initAudioContext();
+  isMusicPlaying = true;
+  
+  const musicToggle = document.getElementById("music-toggle-btn");
+  musicToggle.querySelector(".sound-wave").classList.add("playing");
+  musicToggle.querySelector("i").className = "fa-solid fa-volume-high";
+
+  // Simple automated music sequence (improvised classical Indian raga)
+  let step = 0;
+  const ragaSequence = [0, 1, 2, 4, 3, 4, 5, 4, 2, 1, 2, 0]; // Index of notes in pentatonic scale
+  
+  musicInterval = setInterval(() => {
+    if (!isMusicPlaying) return;
+    
+    // Sometimes play a note, sometimes rests (makes it sound like human breath)
+    if (Math.random() > 0.15) {
+      const noteIdx = ragaSequence[step % ragaSequence.length];
+      const octaveShift = Math.random() > 0.8 ? 2 : 1; // occasional high octave
+      const freq = pentatonicScale[noteIdx] * octaveShift;
+      
+      const duration = 0.5 + Math.random() * 0.8; // varied lengths
+      const vol = 0.08 + Math.random() * 0.05; // soft volume
+      
+      playFluteTone(freq, duration, vol);
+    }
+    
+    step++;
+  }, 1000);
+}
+
+function stopAmbientMusic() {
+  isMusicPlaying = false;
+  clearInterval(musicInterval);
+  
+  const musicToggle = document.getElementById("music-toggle-btn");
+  musicToggle.querySelector(".sound-wave").classList.remove("playing");
+  musicToggle.querySelector("i").className = "fa-solid fa-music";
+}
+
+function toggleMusic() {
+  if (isMusicPlaying) {
+    stopAmbientMusic();
+  } else {
+    startAmbientMusic();
+  }
+}
+
+// Load App immediately
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}

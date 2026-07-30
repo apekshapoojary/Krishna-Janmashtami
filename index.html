@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krishna Janmashtami Celebrations | Dr. B.B. Hegde First Grade College, Kundapura</title>
+  <meta name="description" content="Join the vibrant, playful, and traditional Krishna Janmashtami Utsav organized by Dr. B.B. Hegde First Grade College, Kundapura. Register for competitions, explore wisdom, and relive memories.">
+  <!-- Fonts: Traditional Cinzel and Playful Quicksand -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Quicksand:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <!-- FontAwesome for traditional & modern icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 1. INTRO ANIMATION SCREEN -->
+  <div id="intro-overlay" class="intro-overlay">
+    <div class="stars"></div>
+    <div class="twinkling"></div>
+    <div class="intro-content">
+      <!-- Glow effect behind Little Krishna -->
+      <div class="krishna-glow"></div>
+      <img src="krishna.jpg" id="intro-krishna" class="intro-krishna" alt="Cute Little Krishna">
+      
+      <!-- College Reveal Container -->
+      <div id="intro-college-reveal" class="intro-college-reveal">
+        <img src="college_logo.png" class="reveal-logo" alt="Dr. B.B. Hegde College Logo">
+        <h2 class="reveal-college-name">Dr. B.B. Hegde First Grade College</h2>
+        <p class="reveal-college-location">Kundapura</p>
+        <div class="reveal-divider"></div>
+        <h1 class="reveal-event-title">Krishna Janmashtami Utsav</h1>
+        <p class="reveal-tagline">"Celebrate the Playful Spirit of Kanha"</p>
+        <button id="enter-site-btn" class="enter-btn">Enter Utsav <i class="fa-solid fa-om"></i></button>
+      </div>
+    </div>
+    <button id="skip-intro-btn" class="skip-btn">Skip Intro <i class="fa-solid fa-forward"></i></button>
+  </div>
+
+  <!-- 2. LOGIN AND REGISTRATION SCREEN -->
+  <div id="auth-overlay" class="auth-overlay hidden">
+    <div class="auth-card scroll-background animate-pop">
+      <div class="auth-header">
+        <img src="college_logo.png" class="auth-logo" alt="Dr. B.B. Hegde College Logo">
+        <h3>Dr. B.B. Hegde First Grade College</h3>
+        <p class="auth-subtitle">Janmashtami Utsav Portal</p>
+        <div class="ornament"></div>
+      </div>
+      
+      <!-- Auth Tabs -->
+      <div class="auth-tabs">
+        <button id="tab-login-btn" class="auth-tab-btn active"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+        <button id="tab-register-btn" class="auth-tab-btn"><i class="fa-solid fa-user-plus"></i> Register</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="login-form" class="auth-form active">
+        <div class="form-group">
+          <label for="login-role">Select Role*</label>
+          <select id="login-role" required>
+            <option value="student">Student</option>
+            <option value="organiser">Organiser</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="login-username">Username or Email*</label>
+          <input type="text" id="login-username" required placeholder="e.g., student, admin, organiser">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password*</label>
+          <input type="text" id="login-password" required placeholder="Enter password">
+        </div>
+        <button type="submit" class="submit-btn"><i class="fa-solid fa-om"></i> Enter portal</button>
+        
+        <!-- Demo Credentials Helper -->
+        <div class="demo-login-helper">
+          <span class="helper-title">Quick Demo Login:</span>
+          <div class="helper-buttons">
+            <button type="button" class="demo-btn student-demo" onclick="fillDemoCredentials('student')">Student</button>
+            <button type="button" class="demo-btn organiser-demo" onclick="fillDemoCredentials('organiser')">Organiser</button>
+            <button type="button" class="demo-btn admin-demo" onclick="fillDemoCredentials('admin')">Admin</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- REGISTRATION FORM -->
+      <form id="register-form" class="auth-form">
+        <div class="form-group">
+          <label for="reg-role-type">Register As*</label>
+          <select id="reg-role-type" required>
+            <option value="student">Student</option>
+            <option value="organiser">Organiser</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-user-email">Email Address*</label>
+          <input type="email" id="reg-user-email" required placeholder="e.g., email@example.com">
+        </div>
+        <div class="form-group">
+          <label for="reg-user-username">Username*</label>
+          <input type="text" id="reg-user-username" required placeholder="e.g., apeksha">
+        </div>
+        <div class="form-group">
+          <label for="reg-user-password">Password*</label>
+          <input type="text" id="reg-user-password" required placeholder="Enter password">
+        </div>
+        <button type="submit" class="submit-btn"><i class="fa-solid fa-user-plus"></i> Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- AMBIENT CONTROLS -->
+  <div class="ambient-controls">
+    <button id="music-toggle-btn" class="control-btn" title="Toggle Flute Music">
+      <i class="fa-solid fa-music"></i>
+      <span class="sound-wave">
+        <span></span><span></span><span></span>
+      </span>
+    </button>
+    <div id="user-profile-badge" class="user-profile-badge hidden">
+      <div class="user-avatar"><i class="fa-solid fa-user-circle"></i></div>
+      <div class="user-details">
+        <span id="user-display-name" class="user-name">Loading...</span>
+        <span id="user-display-role" class="user-role-tag">Student</span>
+      </div>
+      <button id="logout-btn" class="logout-btn-header" title="Log Out"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+  </div>
+
+  <!-- MAIN APP CONTAINER (Hidden initially or revealed by script) -->
+  <div id="app-root" class="app-root hidden">
+    <!-- Traditional Garland Border -->
+    <div class="marigold-garland"></div>
+
+    <!-- MAIN HEADER -->
+    <header class="main-header">
+      <div class="header-container">
+        <div class="college-branding">
+          <img src="college_logo.png" class="header-logo" alt="Dr. B.B. Hegde College Logo">
+          <div class="college-info">
+            <span class="college-tag">Organised by</span>
+            <h1 class="college-name">Dr. B.B. Hegde First Grade College</h1>
+            <p class="college-location">Kundapura, Karnataka</p>
+          </div>
+        </div>
+        <div class="utsav-branding">
+          <div class="peacock-feather-bg"></div>
+          <span class="utsav-year">2026</span>
+          <h2 class="utsav-title">श्री कृष्ण जन्माष्टमी</h2>
+          <p class="utsav-sub">Janmashtami Celebrations & Competitions</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- TRADITIONAL SCROLL MARQUEE FOR ANNOUNCEMENTS -->
+    <div class="announcement-bar">
+      <div class="scroll-wrapper">
+        <span class="announcement-item"><i class="fa-solid fa-star text-gold"></i> Welcome to the Janmashtami Utsav! Students can register for events now!</span>
+        <span class="announcement-item"><i class="fa-solid fa-star text-gold"></i> Organisers can add new competitions and update memory archives!</span>
+        <span class="announcement-item"><i class="fa-solid fa-star text-gold"></i> Spot registrations will close shortly before each competition.</span>
+      </div>
+    </div>
+
+    <!-- HERO SECTION (PLAYFUL 3D CANVAS & CRADLE) -->
+    <section class="hero-section">
+      <div class="container hero-container">
+        <div class="hero-3d-playground">
+          <!-- Floating interactive items in simulated 3D space -->
+          <div class="interactive-3d-scene">
+            <!-- Swing / Jhoola for Krishna -->
+            <div class="swing-container">
+              <div class="swing-chains"></div>
+              <div class="swing-board">
+                <img src="krishna.jpg" class="cradle-krishna" alt="Baby Krishna on Cradle">
+              </div>
+            </div>
+            <!-- Interactive Flute (Bansuri) -->
+            <div class="floating-item flute-item" id="interactive-flute" title="Hover/Click to play flute melody!">
+              <div class="flute-body">
+                <span class="flute-hole"></span>
+                <span class="flute-hole"></span>
+                <span class="flute-hole"></span>
+                <span class="flute-hole"></span>
+                <span class="flute-hole"></span>
+                <span class="flute-hole"></span>
+                <div class="peacock-feather-attach"></div>
+              </div>
+            </div>
+            <!-- Floating peacock feather -->
+            <div class="floating-item feather-item animate-sway">
+              <div class="feather-stem"></div>
+              <div class="feather-eye"></div>
+            </div>
+            <!-- Floating Butter Pot (Matka) -->
+            <div class="floating-item matka-item" id="interactive-matka" title="Crack the pot for Krishna's wisdom!">
+              <div class="matka-pot">
+                <div class="matka-rim"></div>
+                <div class="matka-body"></div>
+                <div class="butter-drip"></div>
+              </div>
+              <div class="matka-stand"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="hero-text-content">
+          <div class="traditional-badge">शुभ जन्माष्टमी</div>
+          <h2>Explore wisdom, participate in festive events, and share memories!</h2>
+          <p class="hero-tagline">Step into a playful arena filled with the divine blessings of Lord Krishna. Interact with the elements on screen to experience Kanha's divine playfulness.</p>
+          
+          <!-- KRISHNA'S TEACHING PANEL -->
+          <div class="wisdom-card" id="wisdom-card">
+            <div class="wisdom-icon-container">
+              <i class="fa-solid fa-om wisdom-icon"></i>
+            </div>
+            <div class="wisdom-body">
+              <span class="wisdom-title">Krishna's Teachings</span>
+              <blockquote id="wisdom-text">"You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions."</blockquote>
+              <cite id="wisdom-chapter">Bhagavad Gita - Chapter 2, Verse 47</cite>
+            </div>
+            <button id="next-wisdom-btn" class="wisdom-btn-next" title="New Teaching"><i class="fa-solid fa-rotate"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- Playful Little Krishna Footprints -->
+      <div class="footprints-trail">
+        <span class="footprint" style="left: 10%; bottom: -10px; transform: rotate(15deg);"></span>
+        <span class="footprint" style="left: 20%; bottom: -20px; transform: rotate(-10deg);"></span>
+        <span class="footprint" style="left: 30%; bottom: -10px; transform: rotate(5deg);"></span>
+        <span class="footprint" style="left: 45%; bottom: -25px; transform: rotate(-15deg);"></span>
+        <span class="footprint" style="left: 60%; bottom: -10px; transform: rotate(20deg);"></span>
+        <span class="footprint" style="left: 75%; bottom: -20px; transform: rotate(-5deg);"></span>
+        <span class="footprint" style="left: 90%; bottom: -10px; transform: rotate(10deg);"></span>
+      </div>
+    </section>
+
+    <!-- SECTION CONTENT (DYNAMIC BASED ON ROLE) -->
+    <main class="main-content">
+      
+      <!-- ==================== 1. STUDENT MODULE ==================== -->
+      <div id="module-student" class="role-module active">
+        <!-- Dashboard Intro -->
+        <div class="module-intro">
+          <div class="section-title-wrapper">
+            <span class="sub-title">Student Portal</span>
+            <h2 class="section-title">Janmashtami Activities & Registrations</h2>
+            <div class="ornament"></div>
+          </div>
+          <p class="section-desc">Participate in various cultural and traditional competitions organized by the college. Show your talents and win exciting cash prizes!</p>
+        </div>
+
+        <!-- Tab Buttons for Student Portal -->
+        <div class="tab-container">
+          <button class="tab-btn active" data-tab="student-events"><i class="fa-solid fa-trophy"></i> Competitions</button>
+          <button class="tab-btn" data-tab="student-memories"><i class="fa-solid fa-images"></i> Memory Lane</button>
+          <button class="tab-btn" data-tab="student-registrations"><i class="fa-solid fa-file-invoice"></i> My Registrations</button>
+        </div>
+
+        <!-- Student Tab Content: Competitions -->
+        <div id="student-events" class="tab-content active">
+          <div class="cards-grid" id="student-competitions-list">
+            <!-- Dynamic Competition Cards will be loaded here -->
+          </div>
+        </div>
+
+        <!-- Student Tab Content: Memories -->
+        <div id="student-memories" class="tab-content">
+          <div class="memory-filters">
+            <button class="filter-btn active" data-filter="all">All Memories</button>
+            <button class="filter-btn" data-filter="2025">2025 Celebrations</button>
+            <button class="filter-btn" data-filter="2024">2024 Celebrations</button>
+            <button class="filter-btn" data-filter="2023">2023 Celebrations</button>
+          </div>
+          <div class="cards-grid" id="student-memories-list">
+            <!-- Dynamic Memory Cards will be loaded here -->
+          </div>
+        </div>
+
+        <!-- Student Tab Content: My Registrations -->
+        <div id="student-registrations" class="tab-content">
+          <div class="table-responsive traditional-scroll-container">
+            <table class="traditional-table">
+              <thead>
+                <tr>
+                  <th>Student Name</th>
+                  <th>Roll No</th>
+                  <th>Class & Section</th>
+                  <th>Competition</th>
+                  <th>Registration Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="student-my-registrations-list">
+                <!-- Loaded Dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== 2. ORGANISER MODULE ==================== -->
+      <div id="module-organiser" class="role-module">
+        <div class="module-intro">
+          <div class="section-title-wrapper">
+            <span class="sub-title">Organiser Panel</span>
+            <h2 class="section-title">Manage Competitions & Archive Memories</h2>
+            <div class="ornament"></div>
+          </div>
+          <p class="section-desc">Create competitions, assign guidelines, add memories of previous years, and view student lists registered for your managed competitions.</p>
+        </div>
+
+        <!-- Tab Buttons for Organiser Portal -->
+        <div class="tab-container">
+          <button class="tab-btn active" data-tab="organiser-add-event"><i class="fa-solid fa-plus-circle"></i> Create Competition</button>
+          <button class="tab-btn" data-tab="organiser-add-memory"><i class="fa-solid fa-folder-plus"></i> Add Memory</button>
+          <button class="tab-btn" data-tab="organiser-manage-registrations"><i class="fa-solid fa-users-viewfinder"></i> Participant Rosters</button>
+        </div>
+
+        <!-- Organiser Tab Content: Add Competition Form -->
+        <div id="organiser-add-event" class="tab-content active">
+          <div class="form-container-traditional scroll-background">
+            <h3 class="form-title"><i class="fa-solid fa-feather"></i> Add New Competition</h3>
+            <form id="add-competition-form" class="traditional-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="comp-title">Competition Title*</label>
+                  <input type="text" id="comp-title" required placeholder="e.g., Dahi Handi Sprint">
+                </div>
+                <div class="form-group">
+                  <label for="comp-category">Category*</label>
+                  <select id="comp-category" required>
+                    <option value="Traditional">Traditional Games</option>
+                    <option value="Cultural">Cultural Performance</option>
+                    <option value="Arts">Fine Arts / Rangoli</option>
+                    <option value="Musical">Music / Flute</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="comp-date">Event Date & Time*</label>
+                  <input type="datetime-local" id="comp-date" required>
+                </div>
+                <div class="form-group">
+                  <label for="comp-prize">Cash Prize (INR)*</label>
+                  <input type="text" id="comp-prize" required placeholder="e.g., 1st: ₹5000, 2nd: ₹3000">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="comp-venue">Venue*</label>
+                <input type="text" id="comp-venue" required placeholder="e.g., Main College Grounds">
+              </div>
+
+              <div class="form-group">
+                <label for="comp-rules">Competition Rules & Description*</label>
+                <textarea id="comp-rules" rows="4" required placeholder="Enter competition description, rules, eligibility and team constraints..."></textarea>
+              </div>
+
+              <button type="submit" class="submit-btn"><i class="fa-solid fa-gavel"></i> Propose Competition</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Organiser Tab Content: Add Memory Form -->
+        <div id="organiser-add-memory" class="tab-content">
+          <div class="form-container-traditional scroll-background">
+            <h3 class="form-title"><i class="fa-solid fa-camera-retro"></i> Share Past Year Memory</h3>
+            <form id="add-memory-form" class="traditional-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="mem-title">Memory Title*</label>
+                  <input type="text" id="mem-title" required placeholder="e.g., Golden Pot Breaking Ceremony">
+                </div>
+                <div class="form-group">
+                  <label for="mem-year">Year*</label>
+                  <select id="mem-year" required>
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="mem-image-select">Memory Image Style*</label>
+                <select id="mem-image-select" required>
+                  <option value="krishna.jpg">Generated Cute Krishna Image</option>
+                  <option value="decor">Festive Garland Decoration</option>
+                  <option value="dahi-handi">Dahi Handi (Butter Pot) celebration</option>
+                  <option value="dancing">Traditional Dandiya/Garba dance</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="mem-desc">Memory Description & Stories*</label>
+                <textarea id="mem-desc" rows="4" required placeholder="Describe the memory, highlights, student names, and the festive mood..."></textarea>
+              </div>
+
+              <button type="submit" class="submit-btn"><i class="fa-solid fa-cloud-arrow-up"></i> Archive Memory</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Organiser Tab Content: Manage Registrations ( rosters ) -->
+        <div id="organiser-manage-registrations" class="tab-content">
+          <div class="roster-filter-bar">
+            <label for="organiser-comp-select" class="roster-label">Select Competition:</label>
+            <select id="organiser-comp-select" class="roster-select">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div class="table-responsive traditional-scroll-container">
+            <table class="traditional-table">
+              <thead>
+                <tr>
+                  <th>Roll No</th>
+                  <th>Student Name</th>
+                  <th>Class & Section</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Registration Date</th>
+                </tr>
+              </thead>
+              <tbody id="organiser-roster-list">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== 3. ADMIN MODULE ==================== -->
+      <div id="module-admin" class="role-module">
+        <div class="module-intro">
+          <div class="section-title-wrapper">
+            <span class="sub-title">Admin Console</span>
+            <h2 class="section-title">Institutional Overview & Control</h2>
+            <div class="ornament"></div>
+          </div>
+          <p class="section-desc">Monitor student registrations, approve or discard organiser event proposals, evaluate statistics, and manage overall website modules.</p>
+        </div>
+
+        <!-- Admin Stats Cards -->
+        <div class="admin-stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-user-graduate"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Total Student Registrations</span>
+              <h3 id="stat-total-registrations" class="stat-number">0</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-trophy"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Active Competitions</span>
+              <h3 id="stat-total-competitions" class="stat-number">0</h3>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div class="stat-info">
+              <span class="stat-label">Pending Approval Proposals</span>
+              <h3 id="stat-pending-proposals" class="stat-number">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Buttons for Admin Portal -->
+        <div class="tab-container">
+          <button class="tab-btn active" data-tab="admin-proposals"><i class="fa-solid fa-thumbs-up"></i> Approve Event Proposals</button>
+          <button class="tab-btn" data-tab="admin-all-registrations"><i class="fa-solid fa-list-check"></i> Master Registrations List</button>
+        </div>
+
+        <!-- Admin Tab Content: Approve Event Proposals -->
+        <div id="admin-proposals" class="tab-content active">
+          <div class="proposal-cards-list" id="admin-proposals-list">
+            <!-- Loaded Dynamically -->
+          </div>
+        </div>
+
+        <!-- Admin Tab Content: Master Registrations List -->
+        <div id="admin-all-registrations" class="tab-content">
+          <div class="admin-table-controls">
+            <button id="admin-export-csv" class="export-btn"><i class="fa-solid fa-file-excel"></i> Export CSV</button>
+            <button id="admin-clear-data" class="clear-btn"><i class="fa-solid fa-trash-can"></i> Clear All Data</button>
+          </div>
+          <div class="table-responsive traditional-scroll-container">
+            <table class="traditional-table">
+              <thead>
+                <tr>
+                  <th>Roll No</th>
+                  <th>Student Name</th>
+                  <th>Class & Section</th>
+                  <th>Competition Chosen</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Date Registered</th>
+                </tr>
+              </thead>
+              <tbody id="admin-master-registrations-list">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- EVENT REGISTRATION MODAL -->
+    <div id="registration-modal" class="modal-overlay hidden">
+      <div class="modal-card scroll-background">
+        <button id="close-modal-btn" class="close-modal-btn"><i class="fa-solid fa-circle-xmark"></i></button>
+        <div class="modal-header">
+          <span class="modal-subtitle">Enroll in Celebration</span>
+          <h3 id="modal-comp-title" class="modal-title">Competition Name</h3>
+          <div class="ornament"></div>
+        </div>
+        <form id="student-registration-form" class="traditional-form">
+          <input type="hidden" id="reg-comp-id">
+          
+          <div class="form-group">
+            <label for="reg-student-name">Student Full Name*</label>
+            <input type="text" id="reg-student-name" required placeholder="e.g., Apeksha K.">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-roll-no">Roll Number*</label>
+              <input type="text" id="reg-roll-no" required placeholder="e.g., BBH-2024-045">
+            </div>
+            <div class="form-group">
+              <label for="reg-class">Class & Section*</label>
+              <input type="text" id="reg-class" required placeholder="e.g., III B.Sc (CS)">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-email">Email Address*</label>
+              <input type="email" id="reg-email" required placeholder="e.g., apeksha@example.com">
+            </div>
+            <div class="form-group">
+              <label for="reg-phone">Phone Number*</label>
+              <input type="tel" id="reg-phone" required placeholder="e.g., 9876543210" pattern="[0-9]{10}">
+            </div>
+          </div>
+
+          <div class="form-checkbox">
+            <input type="checkbox" id="reg-agreement" required>
+            <label for="reg-agreement">I agree to abide by the rules and guidelines laid out for the event.*</label>
+          </div>
+
+          <button type="submit" class="submit-btn"><i class="fa-solid fa-om"></i> Complete Registration</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- MAIN FOOTER -->
+    <footer class="main-footer">
+      <div class="footer-container">
+        <div class="footer-left">
+          <img src="college_logo.png" class="footer-logo" alt="Dr. B.B. Hegde College Logo">
+          <div>
+            <h3>Dr. B.B. Hegde First Grade College</h3>
+            <p>Kundapura, Udupi District, Karnataka, India - 576201</p>
+            <p>Truth & Honesty | Live to Learn</p>
+          </div>
+        </div>
+        <div class="footer-right">
+          <p class="dev-credits">Built with love and devotion for Lord Krishna <i class="fa-solid fa-heart text-gold animate-pulse"></i></p>
+          <p class="copyright">&copy; 2026 Dr. B.B. Hegde First Grade College. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
