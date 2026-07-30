@@ -226,6 +226,39 @@ function setupEventListeners() {
   // Logout button
   document.getElementById("logout-btn").addEventListener("click", handleUserLogout);
 
+  // 3D Parallax Mouse Effect on Login Background and Card
+  const authOverlay = document.getElementById("auth-overlay");
+  const authCard = authOverlay.querySelector(".auth-card");
+
+  authOverlay.addEventListener("mousemove", (e) => {
+    // Only run if the login screen is visible
+    if (authOverlay.classList.contains("hidden")) return;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    // Calculate mouse position relative to center (-1 to 1)
+    const mouseX = (e.clientX - width / 2) / (width / 2);
+    const mouseY = (e.clientY - height / 2) / (height / 2);
+
+    // Rotate card in 3D (max 7 degrees rotation)
+    const rotateX = -mouseY * 7;
+    const rotateY = mouseX * 7;
+
+    // Shift background in the opposite direction (Parallax)
+    const bgShiftX = -mouseX * 20; // max 20px shift
+    const bgShiftY = -mouseY * 20;
+
+    authCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    authOverlay.style.backgroundPosition = `calc(50% + ${bgShiftX}px) calc(50% + ${bgShiftY}px)`;
+  });
+
+  // Reset positioning when mouse leaves the overlay
+  authOverlay.addEventListener("mouseleave", () => {
+    authCard.style.transform = "rotateX(0deg) rotateY(0deg)";
+    authOverlay.style.backgroundPosition = "50% 50%";
+  });
+
   // Tab systems for Student, Organiser, and Admin Portals
   const tabContainers = [
     { module: "module-student", selector: "#module-student .tab-btn" },
