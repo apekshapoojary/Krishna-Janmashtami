@@ -1992,11 +1992,14 @@ input, select, textarea {
 @media (min-width: 768px) {
   .auth-overlay {
     justify-content: flex-start;
-    padding-left: 8%;
+    padding-left: 0;
   }
   .auth-card {
     margin-right: 0;
     margin-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none;
   }
 }
 
