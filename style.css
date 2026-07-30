@@ -1958,16 +1958,35 @@ input, select, textarea {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: url('krishna_cute_bg.jpg') no-repeat center center;
-  background-size: 106% 106%;
   z-index: 998;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow-y: auto;
+  overflow: hidden; /* prevent background layer bleed */
   padding: 40px 0;
   perspective: 1500px;
-  transition: background-position 0.1s ease-out;
+}
+
+.auth-bg-layer {
+  position: absolute;
+  top: -5%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
+  background: url('krishna_cute_bg.jpg') no-repeat center center;
+  background-size: cover;
+  z-index: 1;
+  animation: authBgFloat 25s ease-in-out infinite;
+  pointer-events: none;
+  transition: transform 0.2s ease-out;
+}
+
+@keyframes authBgFloat {
+  0% { transform: translate(0, 0) scale(1.02); }
+  25% { transform: translate(-15px, 10px) scale(1.04); }
+  50% { transform: translate(12px, -15px) scale(1.06); }
+  75% { transform: translate(-10px, -8px) scale(1.04); }
+  100% { transform: translate(0, 0) scale(1.02); }
 }
 
 @media (min-width: 768px) {

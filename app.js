@@ -229,6 +229,7 @@ function setupEventListeners() {
   // 3D Parallax Mouse Effect on Login Background and Card
   const authOverlay = document.getElementById("auth-overlay");
   const authCard = authOverlay.querySelector(".auth-card");
+  const authBgLayer = authOverlay.querySelector(".auth-bg-layer");
 
   authOverlay.addEventListener("mousemove", (e) => {
     // Only run if the login screen is visible
@@ -245,18 +246,18 @@ function setupEventListeners() {
     const rotateX = -mouseY * 7;
     const rotateY = mouseX * 7;
 
-    // Shift background in the opposite direction (Parallax)
+    // Shift background in the opposite direction (Parallax offset)
     const bgShiftX = -mouseX * 20; // max 20px shift
     const bgShiftY = -mouseY * 20;
 
     authCard.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    authOverlay.style.backgroundPosition = `calc(50% + ${bgShiftX}px) calc(50% + ${bgShiftY}px)`;
+    authBgLayer.style.transform = `translate(${bgShiftX}px, ${bgShiftY}px) scale(1.03)`;
   });
 
-  // Reset positioning when mouse leaves the overlay
+  // Reset positioning when mouse leaves the overlay (restores CSS floating animation)
   authOverlay.addEventListener("mouseleave", () => {
     authCard.style.transform = "rotateX(0deg) rotateY(0deg)";
-    authOverlay.style.backgroundPosition = "50% 50%";
+    authBgLayer.style.transform = "";
   });
 
   // View Artwork interaction logic
