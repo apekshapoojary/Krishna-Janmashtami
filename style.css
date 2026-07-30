@@ -1958,7 +1958,7 @@ input, select, textarea {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: url('krishna_divine_bg.jpg') no-repeat center center;
+  background: url('krishna_cute_bg.jpg') no-repeat center center;
   background-size: 106% 106%;
   z-index: 998;
   display: flex;
@@ -1968,6 +1968,13 @@ input, select, textarea {
   padding: 40px 0;
   perspective: 1500px;
   transition: background-position 0.1s ease-out;
+}
+
+@media (min-width: 992px) {
+  .auth-overlay {
+    justify-content: flex-end;
+    padding-right: 8%;
+  }
 }
 
 .auth-card {
