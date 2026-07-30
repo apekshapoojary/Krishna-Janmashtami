@@ -40,7 +40,14 @@
 
   <!-- 2. LOGIN AND REGISTRATION SCREEN -->
   <div id="auth-overlay" class="auth-overlay hidden">
+    <!-- Click anywhere to return hint (hidden by default) -->
+    <div id="artwork-view-hint" class="artwork-view-hint">
+      <i class="fa-solid fa-circle-info"></i> Click anywhere to return to Login
+    </div>
     <div class="auth-card scroll-background animate-pop">
+      <button type="button" class="view-artwork-btn" id="view-artwork-btn" title="View Background Artwork">
+        <i class="fa-solid fa-eye"></i> View Artwork
+      </button>
       <div class="auth-header">
         <img src="college_logo.png" class="auth-logo" alt="Dr. B.B. Hegde College Logo">
         <h3>Dr. B.B. Hegde First Grade College</h3>

@@ -259,6 +259,23 @@ function setupEventListeners() {
     authOverlay.style.backgroundPosition = "50% 50%";
   });
 
+  // View Artwork interaction logic
+  const viewArtworkBtn = document.getElementById("view-artwork-btn");
+  const artworkViewHint = document.getElementById("artwork-view-hint");
+
+  viewArtworkBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // prevent triggering overlay click immediately
+    authCard.classList.add("fade-out-artwork");
+    artworkViewHint.classList.add("show");
+  });
+
+  authOverlay.addEventListener("click", () => {
+    if (authCard.classList.contains("fade-out-artwork")) {
+      authCard.classList.remove("fade-out-artwork");
+      artworkViewHint.classList.remove("show");
+    }
+  });
+
   // Tab systems for Student, Organiser, and Admin Portals
   const tabContainers = [
     { module: "module-student", selector: "#module-student .tab-btn" },
