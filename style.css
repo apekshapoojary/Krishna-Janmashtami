@@ -117,10 +117,8 @@ input, select, textarea {
 .intro-content {
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   width: 90%;
   max-width: 600px;
   text-align: center;
@@ -128,13 +126,13 @@ input, select, textarea {
 
 /* Little Krishna Image & Glow Wrapper */
 .krishna-logo-wrapper {
+  grid-area: 1 / 1;
   position: relative;
   width: 260px;
   height: 260px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
   animation: krishna-intro-zoom 5s forwards;
   z-index: 3;
 }
@@ -202,6 +200,7 @@ input, select, textarea {
 
 /* College Reveal Container */
 .intro-college-reveal {
+  grid-area: 1 / 1;
   opacity: 0;
   visibility: hidden;
   transform: translateY(30px);
