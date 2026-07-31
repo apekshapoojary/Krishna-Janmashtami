@@ -721,17 +721,23 @@ input, select, textarea {
 }
 
 .hero-krishna-image {
-  width: 100%;
-  max-width: 440px; /* larger size */
+  width: 92%;
+  max-width: 420px;
   height: auto;
-  mix-blend-mode: multiply; /* removes white background */
+  border-radius: 18px;
+  border: 2.5px double var(--color-gold-deep);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15), var(--shadow-gold);
+  background-color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   animation: float-hero-img 6s ease-in-out infinite;
+  padding: 15px; /* breathing room for the image */
+  box-sizing: border-box;
 }
 
 .hero-krishna-image:hover {
-  transform: scale(1.05) rotate(1.5deg);
+  transform: scale(1.03) rotate(1.5deg);
+  box-shadow: 0 20px 45px rgba(242,146,29,0.25), var(--shadow-gold);
 }
 
 .hero-krishna-image.bounce-click {
