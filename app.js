@@ -395,7 +395,7 @@ function handleUserLogin(e) {
     localStorage.setItem("utsav_current_user", JSON.stringify(foundUser));
     
     // Play success chime
-    playFluteTone(523.25, 0.15, 0.4);
+    // playFluteTone(523.25, 0.15, 0.4);
     
     // Hide auth page, reveal app dashboard
     document.getElementById("auth-overlay").classList.add("hidden");
@@ -435,7 +435,7 @@ function handleUserRegister(e) {
   users.push(newUser);
   localStorage.setItem("utsav_users", JSON.stringify(users));
 
-  playFluteTone(440.00, 0.15, 0.45); // Success note
+  // playFluteTone(440.00, 0.15, 0.45); // Success note
 
   alert("Registration successful! You can now log in with your credentials.");
   document.getElementById("register-form").reset();
@@ -479,7 +479,7 @@ function fillDemoCredentials(role) {
   usernameInput.value = role; // demo username is same as role
   passwordInput.value = role; // demo password is same as role
   
-  playFluteTone(392.00, 0.1, 0.25); // sound feedback
+  // playFluteTone(392.00, 0.1, 0.25); // sound feedback
 }
 
 function switchRole(role) {
@@ -665,7 +665,7 @@ function handleStudentRegistration(e) {
   registrations.push(newReg);
   localStorage.setItem("utsav_registrations", JSON.stringify(registrations));
   
-  playFluteTone(523.25, 0.15, 0.4); // Success high C note
+  // playFluteTone(523.25, 0.15, 0.4); // Success high C note
 
   alert("Congratulations! You have successfully registered for the event.");
   closeModal();
@@ -753,7 +753,7 @@ function handleOrganiserAddCompetition(e) {
   competitions.push(newComp);
   localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
 
-  playFluteTone(329.63, 0.2, 0.4); // sweet tone
+  // playFluteTone(329.63, 0.2, 0.4); // sweet tone
 
   alert("Competition proposed successfully! It has been sent to the Admin for approval.");
   document.getElementById("add-competition-form").reset();
@@ -779,7 +779,7 @@ function handleOrganiserAddMemory(e) {
   memories.push(newMemory);
   localStorage.setItem("utsav_memories", JSON.stringify(memories));
 
-  playFluteTone(440.00, 0.15, 0.45); // cheerful tone
+  // playFluteTone(440.00, 0.15, 0.45); // cheerful tone
 
   alert("Success! Previous year memory archived successfully.");
   document.getElementById("add-memory-form").reset();
@@ -870,7 +870,7 @@ function approveCompetition(compId) {
   competitions[compIndex].approved = true;
   localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
   
-  playFluteTone(523.25, 0.1, 0.3); // success note
+  // playFluteTone(523.25, 0.1, 0.3); // success note
   
   alert("Competition approved and published live!");
   renderAdminPortal();
@@ -883,7 +883,7 @@ function rejectCompetition(compId) {
   competitions = competitions.filter(c => c.id !== compId);
   localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
   
-  playFluteTone(196.00, 0.3, 0.1); // low rejected note
+  // playFluteTone(196.00, 0.3, 0.1); // low rejected note
 
   alert("Competition proposal discarded.");
   renderAdminPortal();
