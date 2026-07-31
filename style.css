@@ -1989,7 +1989,7 @@ input, select, textarea {
   left: -5%;
   width: 110%;
   height: 110%;
-  background: url('krishna_cute_bg.jpg') no-repeat 78% center;
+  background: url('krishna_cute_bg.jpg') no-repeat 22% center;
   background-size: cover;
   z-index: 1;
   animation: authBgFloat 25s ease-in-out infinite;
@@ -2027,15 +2027,19 @@ input, select, textarea {
 
 @media (min-width: 768px) {
   .auth-overlay {
-    justify-content: flex-start;
-    padding-left: 0;
+    justify-content: flex-end;
+    padding-right: 0;
   }
   .auth-card {
     margin-right: 0;
     margin-left: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left: none;
+    max-width: 500px; /* 500px scale! */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    border-top-left-radius: var(--border-radius-traditional);
+    border-bottom-left-radius: var(--border-radius-traditional);
+    border-left: 4px double var(--color-gold-deep);
   }
 }
 
