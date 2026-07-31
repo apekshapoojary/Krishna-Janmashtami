@@ -129,6 +129,11 @@ let melodyTimeout = null;
 let isMusicPlaying = false;
 const pentatonicScale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25]; // C4, D4, E4, G4, A4, C5, D5, E5 (Extended Raag Bhupali scale)
 
+// Background music audio track
+const bgMusicAudio = new Audio("krishna_flute.mp3");
+bgMusicAudio.loop = true;
+bgMusicAudio.volume = 0.55; // moderate volume
+
 // Seed data for Users
 const DEFAULT_USERS = [
   { name: "Principal Admin", email: "admin@hegde.edu", username: "admin", password: "admin", role: "admin" },
@@ -1098,15 +1103,23 @@ let melodyIndex = 0;
 // Generate continuous ambient flute loops
 function startAmbientMusic() {
   if (isMusicPlaying) return;
-  initAudioContext();
   isMusicPlaying = true;
   
   const musicToggle = document.getElementById("music-toggle-btn");
   musicToggle.querySelector(".sound-wave").classList.add("playing");
   musicToggle.querySelector("i").className = "fa-solid fa-volume-high";
 
-  melodyIndex = 0;
-  playNextMelodyNote();
+  // Try playing the user's custom MP3 file, with automatic fallback to Web Audio synthesis
+  bgMusicAudio.play()
+    .then(() => {
+      console.log("Playing custom background music MP3 track.");
+    })
+    .catch(err => {
+      console.warn("Audio playback of MP3 failed or blocked. Falling back to synthesised flute...", err);
+      initAudioContext();
+      melodyIndex = 0;
+      playNextMelodyNote();
+    });
 }
 
 function playNextMelodyNote() {
@@ -1132,6 +1145,13 @@ function playNextMelodyNote() {
 
 function stopAmbientMusic() {
   isMusicPlaying = false;
+  
+  // Pause MP3 audio track
+  if (bgMusicAudio) {
+    bgMusicAudio.pause();
+  }
+
+  // Clear synthesized melody timeouts
   if (melodyTimeout) {
     clearTimeout(melodyTimeout);
     melodyTimeout = null;
