@@ -311,12 +311,16 @@ function setupEventListeners() {
   // Interactive elements hover/click playfulness
   const matka = document.getElementById("interactive-matka");
   matka.addEventListener("click", () => {
+    const pot = matka.querySelector(".matka-pot");
+    if (pot.classList.contains("cracked")) return;
+
     cycleWisdom();
-    playFluteTone(600, 0.1, 0.2); // high note pot crack chime
-    matka.style.transform = "translateZ(60px) rotate(-15deg) scale(1.1)";
+    pot.classList.add("cracked");
+
+    // Reset the pot after 3 seconds for replayability
     setTimeout(() => {
-      matka.style.transform = "translateZ(60px) rotate(0deg) scale(1)";
-    }, 400);
+      pot.classList.remove("cracked");
+    }, 3000);
   });
 
   const flute = document.getElementById("interactive-flute");
