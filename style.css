@@ -733,6 +733,7 @@ input, select, textarea {
   animation: float-hero-img 6s ease-in-out infinite;
   padding: 15px; /* breathing room for the image */
   box-sizing: border-box;
+  margin-top: 30px; /* spacing from top orange banner border */
 }
 
 .hero-krishna-image:hover {
