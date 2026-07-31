@@ -125,8 +125,9 @@ let activeWisdomIndex = 0;
 // Web Audio API Synthesizer variables
 let audioCtx = null;
 let musicInterval = null;
+let melodyTimeout = null;
 let isMusicPlaying = false;
-const pentatonicScale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25]; // C4, D4, E4, G4, A4, C5 (Raag Bhupali notes)
+const pentatonicScale = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25]; // C4, D4, E4, G4, A4, C5, D5, E5 (Extended Raag Bhupali scale)
 
 // Seed data for Users
 const DEFAULT_USERS = [
@@ -972,7 +973,9 @@ function initAudioContext() {
   }
 }
 
-// Play a simulated flute note
+// Play a simulated breathy Indian woodwind flute (Bansuri) note
+let lastPlayedFreq = 329.63; // starting pitch register
+
 function playFluteTone(frequency, duration, volume) {
   try {
     initAudioContext();
@@ -981,39 +984,76 @@ function playFluteTone(frequency, duration, volume) {
     }
 
     const osc = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator(); // Sine wave octave harmonic overtone
     const gainNode = audioCtx.createGain();
     const filter = audioCtx.createBiquadFilter();
 
+    // Create Delay and Echo nodes for a temple-reverb atmosphere
+    const delayNode = audioCtx.createDelay(1.0);
+    const feedbackGain = audioCtx.createGain();
+    const delayFilter = audioCtx.createBiquadFilter();
+
+    delayNode.delayTime.value = 0.38; // 380ms delay length
+    feedbackGain.gain.value = 0.42; // Feedback volume decay rate
+    delayFilter.type = "lowpass";
+    delayFilter.frequency.value = 750; // Soft warm echoes
+
+    // Connect feedback loop
+    delayNode.connect(delayFilter);
+    delayFilter.connect(feedbackGain);
+    feedbackGain.connect(delayNode);
+
+    // Connect oscillators to lowpass filter
     osc.connect(filter);
+    osc2.connect(filter);
+
+    // Connect filter to main gain and delay node
     filter.connect(gainNode);
+    filter.connect(delayNode);
+
+    // Connect nodes to destination
+    delayNode.connect(audioCtx.destination);
     gainNode.connect(audioCtx.destination);
 
-    // Warm flute wave (triangle waves sound breathy and pure, like woodwinds)
+    // Main breathy triangle wave
     osc.type = "triangle";
-    osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(lastPlayedFreq, audioCtx.currentTime);
+    // Smooth pitch glide (Meend)
+    osc.frequency.exponentialRampToValueAtTime(frequency, audioCtx.currentTime + 0.12);
 
-    // Soft vibrato
+    // Sine harmonic wave (octave higher)
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(lastPlayedFreq * 2, audioCtx.currentTime);
+    osc2.frequency.exponentialRampToValueAtTime(frequency * 2, audioCtx.currentTime + 0.12);
+
+    // Soft classical vibrato
     const lfo = audioCtx.createOscillator();
     const lfoGain = audioCtx.createGain();
-    lfo.frequency.value = 6; // 6Hz vibrato
-    lfoGain.gain.value = frequency * 0.015; // pitch bend depth
+    lfo.frequency.value = 5.8; // 5.8Hz vibrato frequency
+    lfoGain.gain.value = frequency * 0.012; // Pitch bend depth
     lfo.connect(lfoGain);
     lfoGain.connect(osc.frequency);
+    lfoGain.connect(osc2.frequency);
     lfo.start();
 
-    // Filter to soften the attack and tone
+    // Lowpass filter to soften attack and overtones
     filter.type = "lowpass";
-    filter.frequency.setValueAtTime(frequency * 2, audioCtx.currentTime);
+    filter.frequency.setValueAtTime(frequency * 1.8, audioCtx.currentTime);
 
-    // Amplitude envelope: soft attack, decay, soft release
+    // Amplitude envelope: soft wind-blown breath attack
     gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + 0.08); // 80ms fade in
-    gainNode.gain.setValueAtTime(volume, audioCtx.currentTime + duration - 0.1);
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration); // 100ms fade out
+    gainNode.gain.linearRampToValueAtTime(volume, audioCtx.currentTime + 0.12); // 120ms fade in
+    gainNode.gain.setValueAtTime(volume, audioCtx.currentTime + duration - 0.15);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
 
     osc.start();
+    osc2.start();
     osc.stop(audioCtx.currentTime + duration);
+    osc2.stop(audioCtx.currentTime + duration);
     lfo.stop(audioCtx.currentTime + duration);
+
+    // Save pitch for next glide
+    lastPlayedFreq = frequency;
   } catch (err) {
     console.warn("Audio playing blocked or failed", err);
   }
@@ -1021,12 +1061,39 @@ function playFluteTone(frequency, duration, volume) {
 
 // Play short 3-note melody sweeps on interactions
 function playShortFluteRiff() {
-  const now = audioCtx ? audioCtx.currentTime : 0;
-  // Play three pentatonic notes ascending
   playFluteTone(329.63, 0.25, 0.15); // E4
   setTimeout(() => playFluteTone(392.00, 0.25, 0.15), 180); // G4
   setTimeout(() => playFluteTone(440.00, 0.4, 0.2), 360); // A4
 }
+
+// Handcrafted classical Indian solo flute loop (Raag Bhupali Alaap)
+const bhupaliMelody = [
+  { note: 2, dur: 2.0 }, // E4
+  { note: 3, dur: 1.0 }, // G4
+  { note: 4, dur: 1.0 }, // A4
+  { note: 5, dur: 3.5 }, // C5 (held)
+  { note: 4, dur: 1.5 }, // A4
+  { note: 3, dur: 1.5 }, // G4
+  { note: 2, dur: 3.0 }, // E4
+  { note: 1, dur: 1.0 }, // D4
+  { note: 2, dur: 1.0 }, // E4
+  { note: 0, dur: 4.5 }, // C4 (resolution)
+
+  { note: 3, dur: 2.0 }, // G4
+  { note: 4, dur: 1.0 }, // A4
+  { note: 5, dur: 1.5 }, // C5
+  { note: 6, dur: 3.5 }, // D5
+  { note: 7, dur: 2.0 }, // E5
+  { note: 6, dur: 1.5 }, // D5
+  { note: 5, dur: 2.0 }, // C5
+  { note: 4, dur: 1.5 }, // A4
+  { note: 3, dur: 2.5 }, // G4
+  { note: 2, dur: 1.5 }, // E4
+  { note: 1, dur: 1.5 }, // D4
+  { note: 0, dur: 5.0 }  // C4 (deep base note resolution)
+];
+
+let melodyIndex = 0;
 
 // Generate continuous ambient flute loops
 function startAmbientMusic() {
@@ -1038,32 +1105,37 @@ function startAmbientMusic() {
   musicToggle.querySelector(".sound-wave").classList.add("playing");
   musicToggle.querySelector("i").className = "fa-solid fa-volume-high";
 
-  // Simple automated music sequence (improvised classical Indian raga)
-  let step = 0;
-  const ragaSequence = [0, 1, 2, 4, 3, 4, 5, 4, 2, 1, 2, 0]; // Index of notes in pentatonic scale
+  melodyIndex = 0;
+  playNextMelodyNote();
+}
+
+function playNextMelodyNote() {
+  if (!isMusicPlaying) return;
   
-  musicInterval = setInterval(() => {
-    if (!isMusicPlaying) return;
-    
-    // Sometimes play a note, sometimes rests (makes it sound like human breath)
-    if (Math.random() > 0.15) {
-      const noteIdx = ragaSequence[step % ragaSequence.length];
-      const octaveShift = Math.random() > 0.8 ? 2 : 1; // occasional high octave
-      const freq = pentatonicScale[noteIdx] * octaveShift;
-      
-      const duration = 0.5 + Math.random() * 0.8; // varied lengths
-      const vol = 0.08 + Math.random() * 0.05; // soft volume
-      
-      playFluteTone(freq, duration, vol);
-    }
-    
-    step++;
-  }, 1000);
+  // Random brief breath pauses to sound like a human flutist
+  if (Math.random() > 0.85 && melodyIndex % 4 === 0) {
+    melodyTimeout = setTimeout(playNextMelodyNote, 800); // 800ms breath pause
+    return;
+  }
+
+  const item = bhupaliMelody[melodyIndex % bhupaliMelody.length];
+  const freq = pentatonicScale[item.note];
+  const duration = item.dur * 1.35; // note ring duration
+  const vol = 0.08 + Math.random() * 0.015; // natural volume expression
+  
+  playFluteTone(freq, duration, vol);
+  
+  // Schedule next note based on duration (1 beat = 1100ms)
+  melodyTimeout = setTimeout(playNextMelodyNote, item.dur * 1100);
+  melodyIndex++;
 }
 
 function stopAmbientMusic() {
   isMusicPlaying = false;
-  clearInterval(musicInterval);
+  if (melodyTimeout) {
+    clearTimeout(melodyTimeout);
+    melodyTimeout = null;
+  }
   
   const musicToggle = document.getElementById("music-toggle-btn");
   musicToggle.querySelector(".sound-wave").classList.remove("playing");
