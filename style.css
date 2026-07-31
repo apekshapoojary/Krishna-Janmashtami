@@ -149,6 +149,22 @@ input, select, textarea {
   position: relative;
 }
 
+.intro-logo-text {
+  position: absolute;
+  bottom: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-gold-light);
+  text-shadow: 0 4px 12px rgba(255, 223, 0, 0.5);
+  white-space: nowrap;
+  letter-spacing: 1px;
+  pointer-events: none;
+  z-index: 5;
+}
+
 .krishna-glow {
   position: absolute;
   width: 320px;
