@@ -702,67 +702,7 @@ input, select, textarea {
   align-items: center;
 }
 
-/* Swinging Jhoola (Cradle) */
-.swing-container {
-  position: absolute;
-  top: 20px;
-  transform-style: preserve-3d;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform: translateZ(20px);
-  animation: cradle-swing 4s ease-in-out infinite alternate;
-}
-
-.swing-chains {
-  width: 140px;
-  height: 150px;
-  border-left: 3px dashed var(--color-gold-deep);
-  border-right: 3px dashed var(--color-gold-deep);
-  position: relative;
-}
-
-.swing-chains::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -20px;
-  width: 180px;
-  height: 8px;
-  background: var(--color-gold-deep);
-  border-radius: 4px;
-}
-
-.swing-board {
-  width: 180px;
-  height: 110px;
-  background: linear-gradient(180deg, #8B4513 0%, #5C2D08 100%);
-  border: 3px solid var(--color-gold-deep);
-  border-radius: 8px;
-  transform: rotateX(75deg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 25px 35px rgba(0,0,0,0.3);
-  position: relative;
-}
-
-.cradle-krishna {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  transform: rotateX(-75deg) translateY(-40px);
-  border: 3px solid var(--color-gold-light);
-  box-shadow: var(--shadow-glow);
-  object-fit: cover;
-}
-
-@keyframes cradle-swing {
-  0% { transform: rotateY(-10deg) rotateZ(-6deg) translateZ(20px); }
-  100% { transform: rotateY(10deg) rotateZ(6deg) translateZ(20px); }
-}
-
-/* Floating items inside scene */
+/* Playground Base */
 .floating-item {
   position: absolute;
   transition: transform 0.2s ease-out;
@@ -770,192 +710,50 @@ input, select, textarea {
   transform-style: preserve-3d;
 }
 
-/* Peacock Feather Item */
-.feather-item {
-  right: 15%;
-  bottom: 25%;
-  width: 70px;
-  height: 120px;
-  transform: translateZ(50px) rotate(-15deg);
-  pointer-events: none;
-}
-
-.feather-stem {
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(to top, var(--color-gold-deep) 0%, var(--color-peacock-teal) 100%);
-  margin: 0 auto;
-  border-radius: 2px;
-}
-
-.feather-eye {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 60px;
-  background: radial-gradient(circle at center, 
-    var(--color-peacock-dark) 10%, 
-    var(--color-peacock-light) 25%, 
-    var(--color-gold-deep) 45%, 
-    var(--color-peacock-teal) 70%, 
-    transparent 100%);
-  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
-  box-shadow: 0 5px 15px rgba(24, 154, 180, 0.4);
-}
-
-.animate-sway {
-  animation: sway 5s ease-in-out infinite alternate;
-}
-
-@keyframes sway {
-  0% { transform: translateZ(50px) rotate(-10deg); }
-  100% { transform: translateZ(50px) rotate(15deg); }
-}
-
-/* Flute (Bansuri) Item */
-.flute-item {
-  left: 10%;
-  bottom: 20%;
-  transform: translateZ(40px) rotate(-25deg);
-}
-
-.flute-body {
-  width: 180px;
-  height: 16px;
-  background: linear-gradient(to bottom, #FFE896 0%, #D4AF37 50%, #997B15 100%);
-  border-radius: 8px;
+/* Center Hero Krishna Image Scene */
+.hero-image-scene {
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-around;
-  padding: 0 20px;
-  position: relative;
-  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-  transition: var(--transition-smooth);
-}
-
-.flute-body:hover {
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 12px 25px rgba(212,175,55,0.5);
-}
-
-.flute-hole {
-  width: 6px;
-  height: 6px;
-  background-color: #5C2D08;
-  border-radius: 50%;
-}
-
-.peacock-feather-attach {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  width: 25px;
-  height: 40px;
-  background: radial-gradient(circle, var(--color-peacock-light) 20%, var(--color-gold-deep) 60%, transparent 100%);
-  border-radius: 50%;
-  transform: rotate(30deg);
-}
-
-/* Butter Pot (Matka) Item */
-.matka-item {
-  right: 10%;
-  top: 40%;
-  transform: translateZ(60px);
-}
-
-.matka-pot {
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle at 30% 30%, #E08244 0%, #943F07 100%);
-  border-radius: 50% 50% 45% 45%;
-  position: relative;
-  box-shadow: 0 15px 25px rgba(0,0,0,0.3);
-  border: 2px solid var(--color-gold-deep);
-  transition: var(--transition-smooth);
-}
-
-.matka-item:hover .matka-pot {
-  transform: rotate(-15deg) scale(1.05);
-  box-shadow: 0 20px 35px rgba(242,146,29,0.4);
-}
-
-.matka-rim {
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 14px;
-  background: linear-gradient(to bottom, var(--color-gold-deep) 0%, #E08244 100%);
-  border-radius: 50%;
-  border: 2px solid var(--color-gold-deep);
-}
-
-.butter-drip {
-  position: absolute;
-  top: 2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 35px;
-  height: 25px;
-  background: radial-gradient(circle, var(--color-white) 60%, #FFF3CD 100%);
-  border-radius: 0 0 15px 15px;
-  box-shadow: 0 3px 5px rgba(0,0,0,0.1);
-  animation: butter-flow 3s ease-in-out infinite alternate;
-}
-
-@keyframes butter-flow {
-  0% { height: 18px; }
-  100% { height: 26px; }
-}
-
-/* Cracked Matka State Styles */
-.matka-pot.cracked {
-  animation: pot-shake-crack 0.6s ease-in-out forwards;
-}
-
-.matka-pot.cracked::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none' stroke='%23361702' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'><path d='M50 0 L47 25 L56 42 L42 62 L50 78 L46 96 M47 25 L32 35 M42 62 L60 68'/></svg>");
-  background-size: 100% 100%;
-  z-index: 5;
-  pointer-events: none;
+  perspective: 1000px;
 }
 
-.matka-pot.cracked .butter-drip {
-  height: 52px;
-  animation: butter-gush-overflow 1.2s ease-out forwards;
+.hero-krishna-image {
+  width: 85%;
+  max-width: 370px;
+  height: auto;
+  border-radius: 20px;
+  border: 4px double var(--color-gold-deep);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25), var(--shadow-gold);
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: float-hero-img 6s ease-in-out infinite;
 }
 
-@keyframes butter-gush-overflow {
-  0% { height: 20px; }
-  100% { height: 52px; border-radius: 0 0 25px 25px; box-shadow: 0 5px 12px rgba(255,255,255,0.4); }
+.hero-krishna-image:hover {
+  transform: scale(1.04) rotate(1.5deg);
+  box-shadow: 0 25px 50px rgba(242,146,29,0.35), var(--shadow-gold);
 }
 
-@keyframes pot-shake-crack {
-  0% { transform: rotate(0deg); }
-  15% { transform: rotate(18deg); }
-  30% { transform: rotate(-18deg); }
-  45% { transform: rotate(12deg); }
-  60% { transform: rotate(-12deg); }
-  75% { transform: rotate(6deg); }
-  100% { transform: rotate(-4deg); }
+.hero-krishna-image.bounce-click {
+  animation: image-bounce-click 0.5s ease-out;
 }
 
-.matka-stand {
-  width: 70px;
-  height: 15px;
-  background: #2C1605;
-  border-radius: 50%;
-  margin: 5px auto 0 auto;
-  opacity: 0.8;
+@keyframes float-hero-img {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(-1.5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes image-bounce-click {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.95) rotate(-2deg); }
+  50% { transform: scale(1.05) rotate(2deg); }
+  70% { transform: scale(0.98) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 
 /* Little Krishna Footprints Trail */

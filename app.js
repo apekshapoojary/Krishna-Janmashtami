@@ -309,27 +309,30 @@ function setupEventListeners() {
   document.getElementById("next-wisdom-btn").addEventListener("click", cycleWisdom);
   
   // Interactive elements hover/click playfulness
+  // Interactive elements hover/click playfulness (Click Krishna to cycle wisdom)
   const matka = document.getElementById("interactive-matka");
-  matka.addEventListener("click", () => {
-    const pot = matka.querySelector(".matka-pot");
-    if (pot.classList.contains("cracked")) return;
+  if (matka) {
+    matka.addEventListener("click", () => {
+      if (matka.classList.contains("bounce-click")) return;
 
-    cycleWisdom();
-    pot.classList.add("cracked");
+      cycleWisdom();
+      matka.classList.add("bounce-click");
 
-    // Reset the pot after 3 seconds for replayability
-    setTimeout(() => {
-      pot.classList.remove("cracked");
-    }, 3000);
-  });
+      setTimeout(() => {
+        matka.classList.remove("bounce-click");
+      }, 500);
+    });
+  }
 
   const flute = document.getElementById("interactive-flute");
-  flute.addEventListener("mouseenter", () => {
-    playShortFluteRiff();
-  });
-  flute.addEventListener("click", () => {
-    playShortFluteRiff();
-  });
+  if (flute) {
+    flute.addEventListener("mouseenter", () => {
+      playShortFluteRiff();
+    });
+    flute.addEventListener("click", () => {
+      playShortFluteRiff();
+    });
+  }
 
   // Ambient music toggle
   document.getElementById("music-toggle-btn").addEventListener("click", toggleMusic);
