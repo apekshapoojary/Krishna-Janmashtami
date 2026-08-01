@@ -386,25 +386,14 @@ function handleUserLogin(e) {
     // Play success chime
     // playFluteTone(523.25, 0.15, 0.4);
     
-    // Add logging-in animation class to auth card for transition
-    const authCard = document.querySelector(".auth-card");
-    if (authCard) {
-      authCard.classList.add("logging-in");
-    }
-
-    setTimeout(() => {
-      // Hide auth page, reveal app dashboard
-      document.getElementById("auth-overlay").classList.add("hidden");
-      document.getElementById("app-root").classList.remove("hidden");
-      
-      showUserProfile(foundUser);
-      switchRole(role);
-      
-      if (authCard) {
-        authCard.classList.remove("logging-in");
-      }
-      document.getElementById("login-form").reset();
-    }, 600);
+    // Hide auth page, reveal app dashboard
+    document.getElementById("auth-overlay").classList.add("hidden");
+    document.getElementById("app-root").classList.remove("hidden");
+    
+    showUserProfile(foundUser);
+    switchRole(role);
+    
+    document.getElementById("login-form").reset();
   } else {
     alert("Invalid credentials or role selection! Please check your details and try again.");
   }
