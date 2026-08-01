@@ -205,29 +205,11 @@ function setupIntroSequence() {
 }
 
 function setupEventListeners() {
-  // Auth Tab Buttons switcher
-  const tabLoginBtn = document.getElementById("tab-login-btn");
-  const tabRegisterBtn = document.getElementById("tab-register-btn");
+  // Auth Login Form submission
   const loginForm = document.getElementById("login-form");
-  const registerForm = document.getElementById("register-form");
-
-  tabLoginBtn.addEventListener("click", () => {
-    tabLoginBtn.classList.add("active");
-    tabRegisterBtn.classList.remove("active");
-    loginForm.classList.add("active");
-    registerForm.classList.remove("active");
-  });
-
-  tabRegisterBtn.addEventListener("click", () => {
-    tabRegisterBtn.classList.add("active");
-    tabLoginBtn.classList.remove("active");
-    registerForm.classList.add("active");
-    loginForm.classList.remove("active");
-  });
-
-  // Auth Forms submission
-  loginForm.addEventListener("submit", handleUserLogin);
-  registerForm.addEventListener("submit", handleUserRegister);
+  if (loginForm) {
+    loginForm.addEventListener("submit", handleUserLogin);
+  }
 
   // Logout button
   document.getElementById("logout-btn").addEventListener("click", handleUserLogout);
@@ -417,41 +399,7 @@ function handleUserLogin(e) {
   }
 }
 
-function handleUserRegister(e) {
-  e.preventDefault();
-  const role = document.getElementById("reg-role-type").value;
-  const email = document.getElementById("reg-user-email").value.trim();
-  const username = document.getElementById("reg-user-username").value.trim().toLowerCase();
-  const password = document.getElementById("reg-user-password").value;
 
-  if (!email || !username || !password) {
-    alert("Please fill in all the required fields.");
-    return;
-  }
-
-  const name = username.charAt(0).toUpperCase() + username.slice(1);
-
-  const users = JSON.parse(localStorage.getItem("utsav_users")) || [];
-  
-  if (users.some(u => u.username.toLowerCase() === username || u.email.toLowerCase() === email)) {
-    alert("Username or Email is already registered!");
-    return;
-  }
-
-  const newUser = { name, email, username, password, role };
-  users.push(newUser);
-  localStorage.setItem("utsav_users", JSON.stringify(users));
-
-  // playFluteTone(440.00, 0.15, 0.45); // Success note
-
-  alert("Registration successful! You can now log in with your credentials.");
-  document.getElementById("register-form").reset();
-
-  // Toggle to Login Tab
-  document.getElementById("tab-login-btn").click();
-  document.getElementById("login-username").value = username;
-  document.getElementById("login-role").value = role;
-}
 
 function handleUserLogout() {
   if (!confirm("Are you sure you want to log out?")) return;
