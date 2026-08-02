@@ -601,6 +601,13 @@ function openRegistrationModal(compId) {
   document.getElementById("reg-comp-id").value = compId;
   document.getElementById("modal-comp-title").textContent = comp.title;
   
+  // Set registration watermark background selected by organiser
+  const modalContainer = document.querySelector(".event-modal-fullscreen-split");
+  if (modalContainer) {
+    const watermarkBg = comp.bgImage || "cartoon_baby_krishna.jpg";
+    modalContainer.style.setProperty("--modal-watermark-bg", `url('${watermarkBg}')`);
+  }
+
   // Set event details banner image if selected by the organiser, otherwise hide container
   const bannerContainer = document.querySelector(".modal-event-banner-container");
   if (comp.image && comp.image.trim() !== "") {
@@ -728,6 +735,7 @@ function handleOrganiserAddCompetition(e) {
   const venue = document.getElementById("comp-venue").value;
   const rules = document.getElementById("comp-rules").value;
   const image = document.getElementById("comp-image").value;
+  const bgImage = document.getElementById("comp-bg-image").value;
 
   const newComp = {
     id: "comp_" + Date.now(),
@@ -738,6 +746,7 @@ function handleOrganiserAddCompetition(e) {
     venue,
     rules,
     image, // Selected banner image
+    bgImage, // Selected watermark background
     approved: false // Proposals from organisers require admin approval
   };
 
