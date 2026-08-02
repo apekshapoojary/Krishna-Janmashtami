@@ -578,6 +578,21 @@
     </footer>
   </div>
 
+  <!-- Custom Alert / Confirm Dialog Modal -->
+  <div id="custom-popup" class="custom-popup-overlay hidden">
+    <div class="custom-popup-card">
+      <div class="popup-icon-container">
+        <i class="fa-solid fa-bell popup-icon" id="popup-icon"></i>
+      </div>
+      <h3 class="popup-title" id="popup-title">Notification</h3>
+      <p class="popup-message" id="popup-message">This is a message.</p>
+      <div class="popup-actions" id="popup-actions">
+        <button id="popup-ok-btn" class="popup-btn popup-btn-primary">OK</button>
+        <button id="popup-cancel-btn" class="popup-btn popup-btn-secondary hidden">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

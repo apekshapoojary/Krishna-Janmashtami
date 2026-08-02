@@ -34,6 +34,12 @@ We have successfully developed the interactive, traditional, and playful Krishna
    - Optimized script execution to trigger immediately on **DOM Content Loaded** instead of waiting for heavy background image downloads, resolving an issue where the "Create Account" button was unresponsive on slow network loads.
    - Implemented a responsive **Slide Entrance & Exit Animation** system for the login card. On desktop, the card slides in from the left and slides out left upon successful validation; on mobile, it slides up from the bottom and exits downward, ensuring a premium tactile transition.
 
+5. **Custom Alert & Confirm Modal System**:
+   - Replaced all native browser popups (`alert()` and `confirm()`) with a beautifully crafted, responsive **Custom Dialog Modal** (`#custom-popup`) that matches the festival's traditional scroll aesthetic.
+   - Designed the popup with a warm cream parchment background, double gold borders, traditional typography, and a scale-spring springy entrance transition.
+   - **Global Interceptor Override**: Globally intercepted the native `window.alert` method so that any existing or new call to `alert(message)` automatically opens the custom dialog. Dynamically detects keywords in the alert message to show a green check icon / "Success" title for success actions, or a red warning icon / "Alert" title for validation or credentials errors.
+   - **Asynchronous Promise Confirmations**: Re-wrote all native `confirm` blocks (for logouts, reject/discard competition proposals, and app data resets) to use an asynchronous promise-based `showCustomConfirm` helper, keeping all actions safe, elegant, and native-feeling.
+
 ---
 
 ## 🛠️ Module Workflows Completed

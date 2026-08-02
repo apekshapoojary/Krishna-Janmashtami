@@ -402,15 +402,17 @@ function handleUserLogin(e) {
 
 
 function handleUserLogout() {
-  if (!confirm("Are you sure you want to log out?")) return;
+  showCustomConfirm("Are you sure you want to log out?", "Log Out").then(confirmed => {
+    if (!confirmed) return;
 
-  localStorage.removeItem("utsav_current_user");
-  stopAmbientMusic();
+    localStorage.removeItem("utsav_current_user");
+    stopAmbientMusic();
 
-  // Hide app and show login
-  document.getElementById("app-root").classList.add("hidden");
-  document.getElementById("user-profile-badge").classList.add("hidden");
-  document.getElementById("auth-overlay").classList.remove("hidden");
+    // Hide app and show login
+    document.getElementById("app-root").classList.add("hidden");
+    document.getElementById("user-profile-badge").classList.add("hidden");
+    document.getElementById("auth-overlay").classList.remove("hidden");
+  });
 }
 
 function showUserProfile(user) {
@@ -833,15 +835,15 @@ function approveCompetition(compId) {
 }
 
 function rejectCompetition(compId) {
-  if (!confirm("Are you sure you want to reject and discard this proposed competition?")) return;
+  showCustomConfirm("Are you sure you want to reject and discard this proposed competition?", "Discard Proposal").then(confirmed => {
+    if (!confirmed) return;
 
-  competitions = competitions.filter(c => c.id !== compId);
-  localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
-  
-  // playFluteTone(196.00, 0.3, 0.1); // low rejected note
-
-  alert("Competition proposal discarded.");
-  renderAdminPortal();
+    competitions = competitions.filter(c => c.id !== compId);
+    localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
+    
+    alert("Competition proposal discarded.");
+    renderAdminPortal();
+  });
 }
 
 function exportRegistrationsCSV() {
@@ -878,14 +880,16 @@ function exportRegistrationsCSV() {
 }
 
 function resetAllData() {
-  if (!confirm("CRITICAL WARNING: This will delete all student registrations, custom memories, and custom proposed competitions, resetting the application to default seed files. Proceed?")) return;
+  showCustomConfirm("CRITICAL WARNING: This will delete all student registrations, custom memories, and custom proposed competitions, resetting the application to default seed files. Proceed?", "Reset All Data").then(confirmed => {
+    if (!confirmed) return;
 
-  localStorage.removeItem("utsav_competitions");
-  localStorage.removeItem("utsav_memories");
-  localStorage.removeItem("utsav_registrations");
+    localStorage.removeItem("utsav_competitions");
+    localStorage.removeItem("utsav_memories");
+    localStorage.removeItem("utsav_registrations");
 
-  initApp();
-  alert("All application data has been reset to defaults.");
+    initApp();
+    alert("All application data has been reset to defaults.");
+  });
 }
 
 // ==========================================
@@ -1124,6 +1128,114 @@ function toggleMusic() {
     startAmbientMusic();
   }
 }
+
+// ==========================================
+// CUSTOM POPUP ALERTS & CONFIRMATIONS SYSTEM
+// ==========================================
+function showCustomAlert(message, title = "Notification", type = "info") {
+  const modal = document.getElementById("custom-popup");
+  const modalTitle = document.getElementById("popup-title");
+  const modalMsg = document.getElementById("popup-message");
+  const modalIcon = document.getElementById("popup-icon");
+  const cancelBtn = document.getElementById("popup-cancel-btn");
+  const okBtn = document.getElementById("popup-ok-btn");
+
+  if (!modal) return;
+
+  // Set Content
+  modalTitle.textContent = title;
+  modalMsg.textContent = message;
+
+  // Set Icon and colors based on type
+  modalIcon.className = "fa-solid popup-icon";
+  if (type === "error") {
+    modalIcon.classList.add("fa-circle-exclamation");
+    modalIcon.style.color = "#d11a2a";
+  } else if (type === "success") {
+    modalIcon.classList.add("fa-circle-check");
+    modalIcon.style.color = "#4CAF50";
+  } else if (type === "confirm") {
+    modalIcon.classList.add("fa-circle-question");
+    modalIcon.style.color = "#f2921d";
+  } else {
+    modalIcon.classList.add("fa-circle-info");
+    modalIcon.style.color = "#189ab4";
+  }
+
+  // Ensure Cancel Button is hidden for simple alert
+  cancelBtn.classList.add("hidden");
+
+  // Show Modal
+  modal.classList.remove("hidden");
+
+  // Cleanup active handlers
+  const handleOk = () => {
+    modal.classList.add("hidden");
+    okBtn.removeEventListener("click", handleOk);
+  };
+  okBtn.addEventListener("click", handleOk);
+}
+
+function showCustomConfirm(message, title = "Confirmation") {
+  return new Promise((resolve) => {
+    const modal = document.getElementById("custom-popup");
+    const modalTitle = document.getElementById("popup-title");
+    const modalMsg = document.getElementById("popup-message");
+    const modalIcon = document.getElementById("popup-icon");
+    const cancelBtn = document.getElementById("popup-cancel-btn");
+    const okBtn = document.getElementById("popup-ok-btn");
+
+    if (!modal) {
+      resolve(false);
+      return;
+    }
+
+    // Set Content
+    modalTitle.textContent = title;
+    modalMsg.textContent = message;
+
+    // Set Icon
+    modalIcon.className = "fa-solid fa-circle-question popup-icon";
+    modalIcon.style.color = "#f2921d";
+
+    // Show Cancel Button
+    cancelBtn.classList.remove("hidden");
+
+    // Show Modal
+    modal.classList.remove("hidden");
+
+    // Click Handlers
+    const cleanUpAndResolve = (result) => {
+      modal.classList.add("hidden");
+      okBtn.removeEventListener("click", handleOkClick);
+      cancelBtn.removeEventListener("click", handleCancelClick);
+      resolve(result);
+    };
+
+    const handleOkClick = () => cleanUpAndResolve(true);
+    const handleCancelClick = () => cleanUpAndResolve(false);
+
+    okBtn.addEventListener("click", handleOkClick);
+    cancelBtn.addEventListener("click", handleCancelClick);
+  });
+}
+
+// Override native alert globally
+window.alert = function(message) {
+  let type = "info";
+  let title = "Notification";
+  const lowerMsg = message.toLowerCase();
+  
+  if (lowerMsg.includes("success") || lowerMsg.includes("congratulations") || lowerMsg.includes("approved")) {
+    type = "success";
+    title = "Success";
+  } else if (lowerMsg.includes("invalid") || lowerMsg.includes("fail") || lowerMsg.includes("warning") || lowerMsg.includes("please fill")) {
+    type = "error";
+    title = "Alert";
+  }
+  
+  showCustomAlert(message, title, type);
+};
 
 // Load App immediately
 if (document.readyState === "loading") {
