@@ -334,11 +334,22 @@ function setupEventListeners() {
   document.getElementById("admin-clear-data").addEventListener("click", resetAllData);
 
   // Modal close
-  document.getElementById("close-modal-btn").addEventListener("click", closeModal);
+  document.querySelectorAll(".close-modal-btn").forEach(btn => btn.addEventListener("click", closeModal));
   window.addEventListener("click", (e) => {
     if (e.target === document.getElementById("registration-modal")) {
       closeModal();
     }
+  });
+
+  // Modal navigation step wizard buttons
+  document.getElementById("proceed-to-register-btn").addEventListener("click", () => {
+    document.getElementById("modal-details-screen").classList.add("hidden");
+    document.getElementById("modal-form-screen").classList.remove("hidden");
+  });
+
+  document.getElementById("back-to-details-btn").addEventListener("click", () => {
+    document.getElementById("modal-details-screen").classList.remove("hidden");
+    document.getElementById("modal-form-screen").classList.add("hidden");
   });
 
   // Parallax 3D effect on mouse movement in the Hero arena
@@ -496,7 +507,6 @@ function renderStudentPortal() {
           <div class="card-meta-list">
             <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> <span>${formatDate(comp.date)}</span></div>
             <div class="meta-item"><i class="fa-solid fa-map-pin"></i> <span>${comp.venue}</span></div>
-            <div class="meta-item"><i class="fa-solid fa-gift"></i> <span>${comp.prize}</span></div>
           </div>
         </div>
         <div class="card-footer">
@@ -581,22 +591,17 @@ function openRegistrationModal(compId) {
 
   document.getElementById("reg-comp-id").value = compId;
   document.getElementById("modal-comp-title").textContent = comp.title;
+  document.getElementById("modal-form-comp-title").textContent = "Register: " + comp.title;
   
-  // Populate additional split-pane details
+  // Populate details
   document.getElementById("modal-event-category").textContent = comp.category || "Traditional";
   document.getElementById("modal-event-date").textContent = formatDate(comp.date);
   document.getElementById("modal-event-venue").textContent = comp.venue;
-  
-  const prizeItem = document.getElementById("modal-prize-item");
-  const eventPrize = document.getElementById("modal-event-prize");
-  if (comp.prize && comp.prize !== "N/A" && comp.prize.trim() !== "") {
-    eventPrize.textContent = comp.prize;
-    prizeItem.classList.remove("hidden");
-  } else {
-    prizeItem.classList.add("hidden");
-  }
-  
   document.getElementById("modal-event-rules").textContent = comp.rules;
+  
+  // Reset screen states to show details screen first
+  document.getElementById("modal-details-screen").classList.remove("hidden");
+  document.getElementById("modal-form-screen").classList.add("hidden");
   
   const modal = document.getElementById("registration-modal");
   modal.classList.remove("hidden");
@@ -604,6 +609,8 @@ function openRegistrationModal(compId) {
 
 function closeModal() {
   document.getElementById("registration-modal").classList.add("hidden");
+  document.getElementById("modal-details-screen").classList.remove("hidden");
+  document.getElementById("modal-form-screen").classList.add("hidden");
   document.getElementById("student-registration-form").reset();
 }
 

@@ -496,50 +496,53 @@
 
     <!-- EVENT DETAILS & REGISTRATION MODAL -->
     <div id="registration-modal" class="modal-overlay hidden">
-      <div class="modal-card scroll-background event-modal-split">
-        <button id="close-modal-btn" class="close-modal-btn"><i class="fa-solid fa-circle-xmark"></i></button>
+      <!-- 1. Event Details Screen -->
+      <div id="modal-details-screen" class="modal-card scroll-background event-modal-single">
+        <button class="close-modal-btn" onclick="closeModal()"><i class="fa-solid fa-circle-xmark"></i></button>
+        <div class="modal-header">
+          <span class="modal-subtitle" id="modal-event-category">Traditional Event</span>
+          <h3 id="modal-comp-title" class="modal-title">Competition Name</h3>
+          <div class="ornament"></div>
+        </div>
         
-        <!-- Left Side: Event Details -->
-        <div class="modal-event-details">
-          <div class="modal-header">
-            <span class="modal-subtitle" id="modal-event-category">Traditional Event</span>
-            <h3 id="modal-comp-title" class="modal-title">Competition Name</h3>
-            <div class="ornament"></div>
-          </div>
-          
-          <div class="event-info-box">
-            <div class="info-item">
-              <i class="fa-solid fa-calendar-days text-gold"></i>
-              <div>
-                <strong>Date & Time</strong>
-                <span id="modal-event-date">28 Aug 2026, 10:00 am</span>
-              </div>
-            </div>
-            <div class="info-item">
-              <i class="fa-solid fa-map-location-dot text-gold"></i>
-              <div>
-                <strong>Venue</strong>
-                <span id="modal-event-venue">College Auditorium</span>
-              </div>
-            </div>
-            <div class="info-item" id="modal-prize-item">
-              <i class="fa-solid fa-trophy text-gold"></i>
-              <div>
-                <strong>Prize Details</strong>
-                <span id="modal-event-prize">1st: ₹5000, 2nd: ₹3000</span>
-              </div>
+        <div class="event-info-box-single">
+          <div class="info-item-single">
+            <i class="fa-solid fa-calendar-days text-gold"></i>
+            <div>
+              <strong>Date & Time</strong>
+              <span id="modal-event-date">28 Aug 2026, 10:00 am</span>
             </div>
           </div>
-
-          <div class="event-rules-section">
-            <h4><i class="fa-solid fa-scroll text-gold"></i> Rules & Guidelines</h4>
-            <p id="modal-event-rules">Competition rules and description details...</p>
+          <div class="info-item-single">
+            <i class="fa-solid fa-map-location-dot text-gold"></i>
+            <div>
+              <strong>Venue</strong>
+              <span id="modal-event-venue">College Auditorium</span>
+            </div>
           </div>
         </div>
 
-        <!-- Right Side: Registration Form -->
-        <div class="modal-registration-form">
-          <h4 class="form-section-title"><i class="fa-solid fa-signature text-gold"></i> Student Registration</h4>
+        <div class="event-rules-section-single">
+          <h4><i class="fa-solid fa-scroll text-gold"></i> Rules & Guidelines</h4>
+          <p id="modal-event-rules">Competition rules and description details...</p>
+        </div>
+
+        <div class="modal-actions-footer">
+          <button id="proceed-to-register-btn" class="submit-btn"><i class="fa-solid fa-pen-to-square"></i> Register for this Event</button>
+        </div>
+      </div>
+
+      <!-- 2. Registration Form Screen -->
+      <div id="modal-form-screen" class="modal-card scroll-background event-modal-single hidden">
+        <button class="close-modal-btn" onclick="closeModal()"><i class="fa-solid fa-circle-xmark"></i></button>
+        
+        <div class="modal-header">
+          <span class="modal-subtitle">Enrollment Form</span>
+          <h3 id="modal-form-comp-title" class="modal-title">Register: Competition Name</h3>
+          <div class="ornament"></div>
+        </div>
+
+        <div class="modal-registration-form-single">
           <form id="student-registration-form" class="traditional-form">
             <input type="hidden" id="reg-comp-id">
             
@@ -570,10 +573,12 @@
               </div>
             </div>
 
-            <button type="submit" class="submit-btn"><i class="fa-solid fa-om"></i> Complete Registration</button>
+            <div class="modal-actions-footer-form">
+              <button type="button" id="back-to-details-btn" class="popup-btn popup-btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back</button>
+              <button type="submit" class="submit-btn"><i class="fa-solid fa-om"></i> Complete Registration</button>
+            </div>
           </form>
         </div>
-
       </div>
     </div>
 
