@@ -51,15 +51,17 @@ We have successfully developed the interactive, traditional, and playful Krishna
 - **Memory Lane**: Filter and browse memories (with pictures and stories) of previous years' celebrations.
 
 ### 2. Organiser View
+- **Organiser Isolation**: Added secondary organiser test accounts (`organiser2` / Dr. Shetty and `organiser3` / Prof. Shenoy) and quick login triggers. Organisers can **only see and manage their own proposed events**; other organisers' events are completely hidden from their view.
 - **Create Competition**: Propose new events (e.g. Dahi Handi Sprint). Removed category and cash prize options from the form for simplification, reorganizing the layout to pair event date, registration deadline, and venue. Added a **mandatory File Upload input** allowing organisers to select and upload any local banner image file from their device to set a custom header picture for the event registration details. The file is read as a Base64 Data URL locally and stored dynamically in local storage. Proposes them in a "Pending" state which requires Admin approval.
 - **Add Memory**: Share stories, year tags, and pictures of past achievements which update instantly on the student portal.
 - **Participant Rosters**: Select an active event and see a list of students registered, including contact details and registration dates.
-- **Manage Competitions**: A dedicated dashboard table showing all proposed and approved events. Includes a red **"Remove" button** allowing organisers to delete any event at any time (which also removes associated student registrations).
+- **Manage Competitions**: A dedicated dashboard table showing all proposed and approved events created by the logged-in organiser. Includes a red **"Remove" button** allowing organisers to delete any event at any time (which also removes associated student registrations).
 
 ### 3. Admin View
+- **Oversight & Approval Authority**: The Admin has sole approval authority over all proposed events. The Admin has full visibility into **each and every event activity** across the app.
 - **Dashboard Stats**: Real-time counts of total student sign-ups, active published events, and pending event approvals.
 - **Approve Event Proposals**: Instantly approve or decline organizer-proposed events. Approved events are instantly published.
-- **Manage Competitions**: A corresponding admin panel table showing all competitions, including approval status, and a red **"Remove" button** to discard any event at any time.
+- **Manage Competitions**: A corresponding admin panel table showing all competitions proposed by all organisers, showing a **"Created By"** column indicating which organiser created it, and a red **"Remove" button** to discard any event at any time.
 - **Master Roster**: A table of all student entries with a **CSV Export** button.
 - **System Clear**: Wipe custom entries to reset the application back to its seeded template.
 
