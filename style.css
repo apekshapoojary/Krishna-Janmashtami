@@ -1818,7 +1818,8 @@ input, select, textarea {
   justify-content: center;
   align-items: center;
   overflow: hidden; /* prevent background layer bleed */
-  padding: 40px 0;
+  padding: 20px 0 110px 0; /* extra bottom padding on mobile to clear the bottom runner */
+  box-sizing: border-box;
   perspective: 1500px;
 }
 
@@ -1867,7 +1868,7 @@ input, select, textarea {
 @media (min-width: 768px) {
   .auth-overlay {
     justify-content: flex-start;
-    padding-left: 4%; /* Space from the left edge of the screen */
+    padding: 40px 0 40px 4%; /* Reset bottom padding to 40px and set left padding on desktop */
   }
   .auth-card {
     margin-right: 0;
@@ -2168,18 +2169,79 @@ input, select, textarea {
   animation: jog-bounce-yashoda 0.48s ease-in-out infinite alternate;
 }
 
+/* Individual limb-swinging keyframe runs */
+.k-leg-left {
+  transform-origin: 45px 58px;
+  animation: leg-swing-left 0.4s ease-in-out infinite alternate;
+}
+
+.k-leg-right {
+  transform-origin: 51px 58px;
+  animation: leg-swing-right 0.4s ease-in-out infinite alternate;
+}
+
+.y-leg-left {
+  transform-origin: 47px 85px;
+  animation: leg-swing-left 0.48s ease-in-out infinite alternate;
+}
+
+.y-leg-right {
+  transform-origin: 57px 85px;
+  animation: leg-swing-right 0.48s ease-in-out infinite alternate;
+}
+
+.y-arm-left {
+  transform-origin: 50px 34px;
+  animation: arm-swing-left 0.48s ease-in-out infinite alternate;
+}
+
+.y-arm-right {
+  transform-origin: 52px 38px;
+  animation: arm-swing-right 0.48s ease-in-out infinite alternate;
+}
+
+.y-pallu {
+  transform-origin: 38px 42px;
+  animation: pallu-flutter 0.35s ease-in-out infinite alternate;
+}
+
+@keyframes leg-swing-left {
+  0% { transform: rotate(-22deg); }
+  100% { transform: rotate(18deg); }
+}
+
+@keyframes leg-swing-right {
+  0% { transform: rotate(18deg); }
+  100% { transform: rotate(-22deg); }
+}
+
+@keyframes arm-swing-left {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(12deg); }
+}
+
+@keyframes arm-swing-right {
+  0% { transform: rotate(12deg); }
+  100% { transform: rotate(-8deg); }
+}
+
+@keyframes pallu-flutter {
+  0% { transform: skewX(-4deg) scaleY(0.97); }
+  100% { transform: skewX(4deg) scaleY(1.03); }
+}
+
 @keyframes run-across {
   0% { left: -120px; }
   100% { left: 100%; }
 }
 
 @keyframes jog-bounce-krishna {
-  0% { transform: translateY(0) scaleX(-1) rotate(2deg); }
-  100% { transform: translateY(-7px) scaleX(-1) rotate(-3deg); }
+  0% { transform: translateY(0) scaleX(-1) rotate(1.5deg); }
+  100% { transform: translateY(-7px) scaleX(-1) rotate(-1.5deg); }
 }
 
 @keyframes jog-bounce-yashoda {
-  0% { transform: translateY(0) rotate(-2deg); }
-  100% { transform: translateY(-6px) rotate(3deg); }
+  0% { transform: translateY(0) rotate(-1.5deg); }
+  100% { transform: translateY(-6px) rotate(1.5deg); }
 }
 
