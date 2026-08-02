@@ -486,25 +486,44 @@ function renderStudentPortal() {
       const isRegistered = registrations.some(r => r.compId === comp.id);
       const regBtnText = isRegistered ? `<i class="fa-solid fa-check"></i> Registered` : `<i class="fa-solid fa-id-card"></i> Register Now`;
 
-      card.innerHTML = `
-        <div class="card-header-pic">
-          <img src="${imageSrc}" class="card-img" alt="${comp.title}">
-          <span class="card-badge ${categoryClass}">${comp.category}</span>
-        </div>
-        <div class="card-body">
-          <h3 class="card-title">${comp.title}</h3>
-          <p class="card-desc">${comp.rules}</p>
-          <div class="card-meta-list">
-            <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> <span>${formatDate(comp.date)}</span></div>
-            <div class="meta-item"><i class="fa-solid fa-map-pin"></i> <span>${comp.venue}</span></div>
+      if (comp.image && comp.image.trim() !== "") {
+        card.innerHTML = `
+          <div class="card-header-pic">
+            <img src="${comp.image}" class="card-img" alt="${comp.title}">
+            <span class="card-badge ${categoryClass}">${comp.category}</span>
           </div>
-        </div>
-        <div class="card-footer">
-          <button class="card-action-btn" ${isRegistered ? 'disabled' : ''} onclick="openRegistrationModal('${comp.id}')">
-            ${regBtnText}
-          </button>
-        </div>
-      `;
+          <div class="card-body">
+            <h3 class="card-title">${comp.title}</h3>
+            <p class="card-desc">${comp.rules}</p>
+            <div class="card-meta-list">
+              <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> <span>${formatDate(comp.date)}</span></div>
+              <div class="meta-item"><i class="fa-solid fa-map-pin"></i> <span>${comp.venue}</span></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="card-action-btn" ${isRegistered ? 'disabled' : ''} onclick="openRegistrationModal('${comp.id}')">
+              ${regBtnText}
+            </button>
+          </div>
+        `;
+      } else {
+        card.innerHTML = `
+          <div class="card-body" style="padding-top: 25px;">
+            <span class="card-badge ${categoryClass}" style="position: static; display: inline-block; margin-bottom: 15px;">${comp.category}</span>
+            <h3 class="card-title">${comp.title}</h3>
+            <p class="card-desc">${comp.rules}</p>
+            <div class="card-meta-list">
+              <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> <span>${formatDate(comp.date)}</span></div>
+              <div class="meta-item"><i class="fa-solid fa-map-pin"></i> <span>${comp.venue}</span></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="card-action-btn" ${isRegistered ? 'disabled' : ''} onclick="openRegistrationModal('${comp.id}')">
+              ${regBtnText}
+            </button>
+          </div>
+        `;
+      }
       compGrid.appendChild(card);
     });
   }
@@ -582,9 +601,14 @@ function openRegistrationModal(compId) {
   document.getElementById("reg-comp-id").value = compId;
   document.getElementById("modal-comp-title").textContent = comp.title;
   
-  // Set event details banner image src
-  const imageSrc = comp.image || "cute_little_krishna_1785341235752.jpg";
-  document.getElementById("modal-event-banner").src = imageSrc;
+  // Set event details banner image if selected by the organiser, otherwise hide container
+  const bannerContainer = document.querySelector(".modal-event-banner-container");
+  if (comp.image && comp.image.trim() !== "") {
+    document.getElementById("modal-event-banner").src = comp.image;
+    bannerContainer.style.display = "block";
+  } else {
+    bannerContainer.style.display = "none";
+  }
   
   // Populate details
   document.getElementById("modal-event-category").textContent = comp.category || "Traditional";

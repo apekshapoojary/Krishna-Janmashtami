@@ -1677,11 +1677,11 @@ input, select, textarea {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('cute_little_krishna_1785341235752.jpg');
+  background-image: url('cartoon_baby_krishna.jpg');
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.1; /* Perfectly transparent watermark background */
+  opacity: 0.12; /* Perfectly transparent watermark background */
   pointer-events: none;
   z-index: 1;
 }
@@ -1841,6 +1841,7 @@ input, select, textarea {
   color: var(--color-marigold-orange);
   cursor: pointer;
   transition: transform 0.3s ease, color 0.3s ease;
+  z-index: 999;
 }
 
 .close-modal-btn:hover {
