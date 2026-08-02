@@ -490,7 +490,7 @@ function renderStudentPortal() {
       
       // Set image category background
       const categoryClass = comp.category.toLowerCase();
-      const imageSrc = MEMORY_IMAGE_MAPPING[categoryClass] || MEMORY_IMAGE_MAPPING["krishna.jpg"];
+      const imageSrc = comp.image || MEMORY_IMAGE_MAPPING[categoryClass] || "cute_little_krishna_1785341235752.jpg";
       
       // Check if student registered
       const isRegistered = registrations.some(r => r.compId === comp.id);
@@ -592,6 +592,10 @@ function openRegistrationModal(compId) {
   document.getElementById("reg-comp-id").value = compId;
   document.getElementById("modal-comp-title").textContent = comp.title;
   document.getElementById("modal-form-comp-title").textContent = "Register: " + comp.title;
+  
+  // Set event details banner image src
+  const imageSrc = comp.image || "cute_little_krishna_1785341235752.jpg";
+  document.getElementById("modal-event-banner").src = imageSrc;
   
   // Populate details
   document.getElementById("modal-event-category").textContent = comp.category || "Traditional";
@@ -716,6 +720,7 @@ function handleOrganiserAddCompetition(e) {
   const date = document.getElementById("comp-date").value;
   const venue = document.getElementById("comp-venue").value;
   const rules = document.getElementById("comp-rules").value;
+  const image = document.getElementById("comp-image").value;
 
   const newComp = {
     id: "comp_" + Date.now(),
@@ -725,6 +730,7 @@ function handleOrganiserAddCompetition(e) {
     prize: "N/A", // Default prize
     venue,
     rules,
+    image, // Selected banner image
     approved: false // Proposals from organisers require admin approval
   };
 

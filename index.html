@@ -343,6 +343,17 @@
                 <textarea id="comp-rules" rows="4" required placeholder="Enter competition description, rules, eligibility and team constraints..."></textarea>
               </div>
 
+              <div class="form-group">
+                <label for="comp-image">Select Banner Image*</label>
+                <select id="comp-image" required>
+                  <option value="cute_little_krishna_1785341235752.jpg">Cute Toddler Krishna</option>
+                  <option value="krishna_hero.jpg">Lord Krishna hugging Calf</option>
+                  <option value="krishna_cute_bg_1785420475058.jpg">Gopal Eating Butter</option>
+                  <option value="krishna_divine_bg_1785418380917.jpg">Divine Flute Player</option>
+                  <option value="yashoda_chasing_1785568678718.jpg">Yashoda chasing Krishna</option>
+                </select>
+              </div>
+
               <button type="submit" class="submit-btn"><i class="fa-solid fa-gavel"></i> Propose Competition</button>
             </form>
           </div>
@@ -499,6 +510,10 @@
       <!-- 1. Event Details Screen -->
       <div id="modal-details-screen" class="modal-card scroll-background event-modal-single">
         <button class="close-modal-btn" onclick="closeModal()"><i class="fa-solid fa-circle-xmark"></i></button>
+        <!-- Event Details Banner Image -->
+        <div class="modal-event-banner-container">
+          <img id="modal-event-banner" src="" class="modal-event-banner" alt="Event Banner">
+        </div>
         <div class="modal-header">
           <span class="modal-subtitle" id="modal-event-category">Traditional Event</span>
           <h3 id="modal-comp-title" class="modal-title">Competition Name</h3>

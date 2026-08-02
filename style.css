@@ -1653,14 +1653,35 @@ input, select, textarea {
 }
 
 .event-modal-single {
-  width: 90%;
-  max-width: 580px;
-  max-height: 85vh;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 0;
+  border: none;
+  border-left: 6px double var(--color-gold-deep);
+  border-right: 6px double var(--color-gold-deep);
+  box-shadow: none;
+  padding: 50px 8% !important;
+  box-sizing: border-box;
   overflow-y: auto;
-  padding: 40px !important;
-  border-radius: var(--border-radius-traditional);
-  border: 4px double var(--color-gold-deep);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45), var(--shadow-gold);
+}
+
+.modal-event-banner-container {
+  width: 100%;
+  height: 280px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px double var(--color-gold-deep);
+  margin-bottom: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-event-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .event-info-box-single {

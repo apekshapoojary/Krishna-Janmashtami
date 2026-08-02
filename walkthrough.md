@@ -47,11 +47,11 @@ We have successfully developed the interactive, traditional, and playful Krishna
 ### 1. Student View
 - **Wisdom Board**: Click the butter pot to break it and reveal modern interpretations of Bhagavad Gita teachings.
 - **Competitions list**: View active, approved events (fancy dress, dahi handi, etc.) with dates and rules (cash prizes have been completely removed from the entire application).
-- **Registration Form**: Click "Register Now" on an event card to open a dedicated **Event Details Interface** detailing category, formatted date, venue, and full guidelines. This details interface features a "Register for this Event" button that dynamically transitions the user to a separate **Student Registration Form Interface** to complete enrollment. The terms agreement checkbox has been removed.
+- **Registration Form**: Click "Register Now" on an event card to open a gorgeous **Full-Screen Event Details Interface** (`width: 100vw; height: 100vh;`) showing a large traditional banner image corresponding to the event, along with category, formatted date, venue, and full guidelines. This details interface features a "Register for this Event" button that dynamically transitions the user to a separate **Full-Screen Student Registration Form Interface** to complete enrollment. The terms agreement checkbox has been removed.
 - **Memory Lane**: Filter and browse memories (with pictures and stories) of previous years' celebrations.
 
 ### 2. Organiser View
-- **Create Competition**: Propose new events (e.g. Dahi Handi Sprint). Removed category and cash prize options from the form for simplification, reorganizing the layout to pair event date and venue together in a clean column structure. Proposes them in a "Pending" state which requires Admin approval.
+- **Create Competition**: Propose new events (e.g. Dahi Handi Sprint). Removed category and cash prize options from the form for simplification, reorganizing the layout to pair event date and venue, and **added a Select Banner Image dropdown** allowing organisers to select a specific traditional Krishna illustration for their proposed event. Proposes them in a "Pending" state which requires Admin approval.
 - **Add Memory**: Share stories, year tags, and pictures of past achievements which update instantly on the student portal.
 - **Participant Rosters**: Select an active event and see a list of students registered, including contact details and registration dates.
 
