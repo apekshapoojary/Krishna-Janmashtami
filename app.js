@@ -727,6 +727,23 @@ function renderOrganiserRoster(compId) {
   }
 }
 
+function readFileAsDataURL(file) {
+  return new Promise((resolve) => {
+    if (!file) {
+      resolve("");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      resolve(e.target.result);
+    };
+    reader.onerror = function() {
+      resolve("");
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function handleOrganiserAddCompetition(e) {
   e.preventDefault();
 
@@ -734,30 +751,36 @@ function handleOrganiserAddCompetition(e) {
   const date = document.getElementById("comp-date").value;
   const venue = document.getElementById("comp-venue").value;
   const rules = document.getElementById("comp-rules").value;
-  const image = document.getElementById("comp-image").value;
-  const bgImage = document.getElementById("comp-bg-image").value;
+  
+  const imageFile = document.getElementById("comp-image-file").files[0];
+  const bgImageFile = document.getElementById("comp-bg-image-file").files[0];
 
-  const newComp = {
-    id: "comp_" + Date.now(),
-    title,
-    category: "Traditional", // Default category
-    date,
-    prize: "N/A", // Default prize
-    venue,
-    rules,
-    image, // Selected banner image
-    bgImage, // Selected watermark background
-    approved: false // Proposals from organisers require admin approval
-  };
+  Promise.all([
+    readFileAsDataURL(imageFile),
+    readFileAsDataURL(bgImageFile)
+  ]).then(([bannerDataUrl, watermarkDataUrl]) => {
+    const newComp = {
+      id: "comp_" + Date.now(),
+      title,
+      category: "Traditional", // Default category
+      date,
+      prize: "N/A", // Default prize
+      venue,
+      rules,
+      image: bannerDataUrl, // Store Base64 Data URL!
+      bgImage: watermarkDataUrl || "cartoon_baby_krishna.jpg", // Store Base64 Data URL or fallback
+      approved: false // Proposals from organisers require admin approval
+    };
 
-  competitions.push(newComp);
-  localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
+    competitions.push(newComp);
+    localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
 
-  // playFluteTone(329.63, 0.2, 0.4); // sweet tone
+    // playFluteTone(329.63, 0.2, 0.4); // sweet tone
 
-  alert("Competition proposed successfully! It has been sent to the Admin for approval.");
-  document.getElementById("add-competition-form").reset();
-  renderOrganiserPortal();
+    alert("Competition proposed successfully! It has been sent to the Admin for approval.");
+    document.getElementById("add-competition-form").reset();
+    renderOrganiserPortal();
+  });
 }
 
 function handleOrganiserAddMemory(e) {

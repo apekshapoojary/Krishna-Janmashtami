@@ -51,7 +51,7 @@ We have successfully developed the interactive, traditional, and playful Krishna
 - **Memory Lane**: Filter and browse memories (with pictures and stories) of previous years' celebrations.
 
 ### 2. Organiser View
-- **Create Competition**: Propose new events (e.g. Dahi Handi Sprint). Removed category and cash prize options from the form for simplification, reorganizing the layout to pair event date and venue. Added two image selectors: **Select Banner Image** (to choose a top event banner picture) and **Select Registration Watermark Background** (to choose the transparent background illustration of Lord Krishna for the student signup popups). Proposes them in a "Pending" state which requires Admin approval.
+- **Create Competition**: Propose new events (e.g. Dahi Handi Sprint). Removed category and cash prize options from the form for simplification, reorganizing the layout to pair event date and venue. Replaced predefined list boxes with **two custom File Upload inputs** allowing organisers to select and upload any local image file from their device: **Upload Banner Image** (to set a custom header picture for the event details) and **Upload Registration Watermark Background** (to set a custom transparent background watermark for the registration split layout). Both files are read as Base64 Data URLs locally and stored dynamically in local storage. Proposes them in a "Pending" state which requires Admin approval.
 - **Add Memory**: Share stories, year tags, and pictures of past achievements which update instantly on the student portal.
 - **Participant Rosters**: Select an active event and see a list of students registered, including contact details and registration dates.
 
