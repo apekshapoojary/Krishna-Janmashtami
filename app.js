@@ -9,6 +9,7 @@ const INITIAL_COMPETITIONS = [
     title: "Kanha Fancy Dress Contest",
     category: "Traditional",
     date: "2026-08-28T10:00",
+    deadline: "2026-08-28T10:00",
     prize: "1st: ₹5000, 2nd: ₹3000",
     venue: "College Auditorium",
     rules: "Open to all students. Participants must bring their own costume, flute, and peacock crown. Presentation time limit is 3 minutes.",
@@ -19,6 +20,7 @@ const INITIAL_COMPETITIONS = [
     title: "Dahi Handi Sprint (Pot Breaking)",
     category: "Traditional",
     date: "2026-08-28T15:00",
+    deadline: "2026-08-28T15:00",
     prize: "1st: ₹10000, 2nd: ₹5000",
     venue: "College Playground",
     rules: "Teams of 5. Maximum height is 3 human tiers. Safety harnesses and crash mats will be provided by the college. The team that breaks the pot in the shortest time wins.",
@@ -29,6 +31,7 @@ const INITIAL_COMPETITIONS = [
     title: "Janmashtami Rangoli Artistry",
     category: "Arts",
     date: "2026-08-28T11:30",
+    deadline: "2026-08-28T11:30",
     prize: "1st: ₹3000, 2nd: ₹1500",
     venue: "Main Block Corridors",
     rules: "Individual or pairs. Time limit: 2 hours. Space provided: 4x4 feet. Stencils are not allowed. Bring your own organic colors.",
@@ -39,6 +42,7 @@ const INITIAL_COMPETITIONS = [
     title: "Muralidhara Solo Flute Recital",
     category: "Musical",
     date: "2026-08-28T13:30",
+    deadline: "2026-08-28T13:30",
     prize: "1st: ₹4000, 2nd: ₹2000",
     venue: "Seminar Hall II",
     rules: "Time limit: 5 minutes. Classical or semi-classical Janmashtami tunes/bhajans are allowed. Shruti box is permitted.",
@@ -469,7 +473,12 @@ function renderStudentPortal() {
   const compGrid = document.getElementById("student-competitions-list");
   compGrid.innerHTML = "";
   
-  const approvedComps = competitions.filter(c => c.approved);
+  const now = new Date();
+  const approvedComps = competitions.filter(c => {
+    if (!c.approved) return false;
+    if (!c.deadline) return true; // Legacy fallback
+    return new Date(c.deadline) > now;
+  });
 
   if (approvedComps.length === 0) {
     compGrid.innerHTML = `<p class="no-data-msg">No active competitions available. Check back soon!</p>`;
@@ -480,7 +489,6 @@ function renderStudentPortal() {
       
       // Set image category background
       const categoryClass = comp.category.toLowerCase();
-      const imageSrc = comp.image || MEMORY_IMAGE_MAPPING[categoryClass] || "cute_little_krishna_1785341235752.jpg";
       
       // Check if student registered
       const isRegistered = registrations.some(r => r.compId === comp.id);
@@ -498,6 +506,7 @@ function renderStudentPortal() {
             <div class="card-meta-list">
               <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> <span>${formatDate(comp.date)}</span></div>
               <div class="meta-item"><i class="fa-solid fa-map-pin"></i> <span>${comp.venue}</span></div>
+              <div class="meta-item"><i class="fa-solid fa-hourglass-half" style="color: var(--color-marigold-orange);"></i> <span>Register By: ${comp.deadline ? formatDate(comp.deadline) : 'N/A'}</span></div>
             </div>
           </div>
           <div class="card-footer">
@@ -515,6 +524,7 @@ function renderStudentPortal() {
             <div class="card-meta-list">
               <div class="meta-item"><i class="fa-solid fa-calendar-day"></i> <span>${formatDate(comp.date)}</span></div>
               <div class="meta-item"><i class="fa-solid fa-map-pin"></i> <span>${comp.venue}</span></div>
+              <div class="meta-item"><i class="fa-solid fa-hourglass-half" style="color: var(--color-marigold-orange);"></i> <span>Register By: ${comp.deadline ? formatDate(comp.deadline) : 'N/A'}</span></div>
             </div>
           </div>
           <div class="card-footer">
@@ -616,6 +626,7 @@ function openRegistrationModal(compId) {
   document.getElementById("modal-event-category").textContent = comp.category || "Traditional";
   document.getElementById("modal-event-date").textContent = formatDate(comp.date);
   document.getElementById("modal-event-venue").textContent = comp.venue;
+  document.getElementById("modal-event-deadline").textContent = comp.deadline ? formatDate(comp.deadline) : "N/A";
   document.getElementById("modal-event-rules").textContent = comp.rules;
   
   const modal = document.getElementById("registration-modal");
@@ -669,6 +680,70 @@ function handleStudentRegistration(e) {
 // 6. ORGANISER PORTAL LOGIC
 // ==========================================
 
+function renderCompetitionsTables() {
+  const organiserTbody = document.getElementById("organiser-competitions-table-body");
+  const adminTbody = document.getElementById("admin-competitions-table-body");
+  
+  const populate = (tbody) => {
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    if (competitions.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-gray); padding: 15px;">No competitions proposed yet.</td></tr>`;
+      return;
+    }
+
+    competitions.forEach(comp => {
+      const row = document.createElement("tr");
+      
+      const statusBadge = comp.approved 
+        ? `<span class="badge badge-success" style="background-color: rgba(40,167,69,0.12); color: #28a745; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem;"><i class="fa-solid fa-check-circle"></i> Approved</span>`
+        : `<span class="badge badge-pending" style="background-color: rgba(253,126,20,0.12); color: #fd7e14; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem;"><i class="fa-solid fa-hourglass-half"></i> Pending</span>`;
+
+      row.innerHTML = `
+        <td style="font-weight: 700; color: var(--color-peacock-dark);">${comp.title}</td>
+        <td>${formatDate(comp.date)}</td>
+        <td>${comp.deadline ? formatDate(comp.deadline) : 'N/A'}</td>
+        <td>${comp.venue}</td>
+        <td>${statusBadge}</td>
+        <td>
+          <button class="remove-btn" onclick="removeCompetition('${comp.id}')" style="background-color: rgba(220,53,69,0.08); color: #dc3545; border: 1px solid rgba(220,53,69,0.25); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; font-weight: bold; font-family: var(--font-body);">
+            <i class="fa-solid fa-trash-can"></i> Remove
+          </button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  };
+
+  populate(organiserTbody);
+  populate(adminTbody);
+}
+
+function removeCompetition(compId) {
+  showCustomConfirm("Are you sure you want to permanently remove this competition? This will also remove any registered student rosters.", "Remove Competition").then(confirmed => {
+    if (confirmed) {
+      // Delete registrations for this competition
+      registrations = registrations.filter(r => r.compId !== compId);
+      localStorage.setItem("utsav_registrations", JSON.stringify(registrations));
+
+      // Delete competition
+      competitions = competitions.filter(c => c.id !== compId);
+      localStorage.setItem("utsav_competitions", JSON.stringify(competitions));
+
+      // Refresh portals
+      renderStudentPortal();
+      renderOrganiserPortal();
+      renderAdminPortal();
+      
+      alert("Competition successfully removed!");
+    }
+  });
+}
+
+// Bind to window for HTML inline access
+window.removeCompetition = removeCompetition;
+
 function renderOrganiserPortal() {
   // Populate the rosters select dropdown filter
   const selectComp = document.getElementById("organiser-comp-select");
@@ -691,6 +766,9 @@ function renderOrganiserPortal() {
     // Trigger render on first item
     renderOrganiserRoster(approvedComps[0].id);
   }
+
+  // Render the proposed/approved competitions list table
+  renderCompetitionsTables();
 }
 
 function renderOrganiserRoster(compId) {
@@ -744,6 +822,7 @@ function handleOrganiserAddCompetition(e) {
 
   const title = document.getElementById("comp-title").value;
   const date = document.getElementById("comp-date").value;
+  const deadline = document.getElementById("comp-deadline").value;
   const venue = document.getElementById("comp-venue").value;
   const rules = document.getElementById("comp-rules").value;
   
@@ -755,6 +834,7 @@ function handleOrganiserAddCompetition(e) {
       title,
       category: "Traditional", // Default category
       date,
+      deadline, // Registration deadline
       prize: "N/A", // Default prize
       venue,
       rules,
@@ -874,6 +954,9 @@ function renderAdminPortal() {
       masterTableBody.appendChild(row);
     });
   }
+  
+  // Render the proposed/approved competitions list table
+  renderCompetitionsTables();
 }
 
 function approveCompetition(compId) {

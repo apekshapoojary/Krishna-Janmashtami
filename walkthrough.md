@@ -47,17 +47,19 @@ We have successfully developed the interactive, traditional, and playful Krishna
 ### 1. Student View
 - **Wisdom Board**: Click the butter pot to break it and reveal modern interpretations of Bhagavad Gita teachings.
 - **Competitions list**: View active, approved events (fancy dress, dahi handi, etc.) with dates and rules (cash prizes have been completely removed from the entire application).
-- **Registration Form**: Click "Register Now" on an event card to open a gorgeous **Full-Screen Split-Pane Event Details & Registration Interface** (`width: 100vw; height: 100vh;`). The left pane displays the organiser's custom banner image, title, category, formatted date, venue, and full guidelines. The right pane displays the student registration form directly, allowing complete enrollment in one screen. The terms agreement checkbox has been removed and the close button is layered safely on top with `z-index: 999` to ensure flawless pointer-event click triggers.
+- **Registration Form**: Click "Register Now" on an event card to open a gorgeous **Full-Screen Split-Pane Event Details & Registration Interface** (`width: 100vw; height: 100vh;`). The left pane displays the organiser's custom banner image, title, category, formatted date, venue, registration deadline (indicating exactly when enrollment closes), and full guidelines. The right pane displays the student registration form directly, allowing complete enrollment in one screen. If the registration deadline has passed, the competition is automatically removed and filtered out from the student view. The terms agreement checkbox has been removed and the close button is layered safely on top with `z-index: 999` to ensure flawless pointer-event click triggers.
 - **Memory Lane**: Filter and browse memories (with pictures and stories) of previous years' celebrations.
 
 ### 2. Organiser View
-- **Create Competition**: Propose new events (e.g. Dahi Handi Sprint). Removed category and cash prize options from the form for simplification, reorganizing the layout to pair event date and venue. Added a **mandatory File Upload input** allowing organisers to select and upload any local banner image file from their device to set a custom header picture for the event registration details. The file is read as a Base64 Data URL locally and stored dynamically in local storage. Proposes them in a "Pending" state which requires Admin approval.
+- **Create Competition**: Propose new events (e.g. Dahi Handi Sprint). Removed category and cash prize options from the form for simplification, reorganizing the layout to pair event date, registration deadline, and venue. Added a **mandatory File Upload input** allowing organisers to select and upload any local banner image file from their device to set a custom header picture for the event registration details. The file is read as a Base64 Data URL locally and stored dynamically in local storage. Proposes them in a "Pending" state which requires Admin approval.
 - **Add Memory**: Share stories, year tags, and pictures of past achievements which update instantly on the student portal.
 - **Participant Rosters**: Select an active event and see a list of students registered, including contact details and registration dates.
+- **Manage Competitions**: A dedicated dashboard table showing all proposed and approved events. Includes a red **"Remove" button** allowing organisers to delete any event at any time (which also removes associated student registrations).
 
 ### 3. Admin View
 - **Dashboard Stats**: Real-time counts of total student sign-ups, active published events, and pending event approvals.
 - **Approve Event Proposals**: Instantly approve or decline organizer-proposed events. Approved events are instantly published.
+- **Manage Competitions**: A corresponding admin panel table showing all competitions, including approval status, and a red **"Remove" button** to discard any event at any time.
 - **Master Roster**: A table of all student entries with a **CSV Export** button.
 - **System Clear**: Wipe custom entries to reset the application back to its seeded template.
 

@@ -315,6 +315,7 @@
           <button class="tab-btn active" data-tab="organiser-add-event"><i class="fa-solid fa-plus-circle"></i> Create Competition</button>
           <button class="tab-btn" data-tab="organiser-add-memory"><i class="fa-solid fa-folder-plus"></i> Add Memory</button>
           <button class="tab-btn" data-tab="organiser-manage-registrations"><i class="fa-solid fa-users-viewfinder"></i> Participant Rosters</button>
+          <button class="tab-btn" data-tab="organiser-manage-competitions"><i class="fa-solid fa-list-check"></i> Manage Competitions</button>
         </div>
 
         <!-- Organiser Tab Content: Add Competition Form -->
@@ -333,9 +334,14 @@
                   <input type="datetime-local" id="comp-date" required>
                 </div>
                 <div class="form-group">
-                  <label for="comp-venue">Venue*</label>
-                  <input type="text" id="comp-venue" required placeholder="e.g., Main College Grounds">
+                  <label for="comp-deadline">Registration Deadline*</label>
+                  <input type="datetime-local" id="comp-deadline" required>
                 </div>
+              </div>
+
+              <div class="form-group">
+                <label for="comp-venue">Venue*</label>
+                <input type="text" id="comp-venue" required placeholder="e.g., Main College Grounds">
               </div>
 
               <div class="form-group">
@@ -419,6 +425,27 @@
             </table>
           </div>
         </div>
+
+        <!-- Organiser Tab Content: Manage Competitions -->
+        <div id="organiser-manage-competitions" class="tab-content">
+          <div class="table-responsive traditional-scroll-container">
+            <table class="traditional-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Date & Time</th>
+                  <th>Deadline</th>
+                  <th>Venue</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="organiser-competitions-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <!-- ==================== 3. ADMIN MODULE ==================== -->
@@ -461,6 +488,7 @@
         <div class="tab-container">
           <button class="tab-btn active" data-tab="admin-proposals"><i class="fa-solid fa-thumbs-up"></i> Approve Event Proposals</button>
           <button class="tab-btn" data-tab="admin-all-registrations"><i class="fa-solid fa-list-check"></i> Master Registrations List</button>
+          <button class="tab-btn" data-tab="admin-manage-competitions"><i class="fa-solid fa-list-check"></i> Manage Competitions</button>
         </div>
 
         <!-- Admin Tab Content: Approve Event Proposals -->
@@ -490,6 +518,27 @@
                 </tr>
               </thead>
               <tbody id="admin-master-registrations-list">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Admin Tab Content: Manage Competitions -->
+        <div id="admin-manage-competitions" class="tab-content">
+          <div class="table-responsive traditional-scroll-container">
+            <table class="traditional-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Date & Time</th>
+                  <th>Deadline</th>
+                  <th>Venue</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-competitions-table-body">
                 <!-- Dynamically populated -->
               </tbody>
             </table>
@@ -530,6 +579,13 @@
               <div>
                 <strong>Venue</strong>
                 <span id="modal-event-venue">College Auditorium</span>
+              </div>
+            </div>
+            <div class="info-item-split">
+              <i class="fa-solid fa-hourglass-end text-gold"></i>
+              <div>
+                <strong>Registration Deadline</strong>
+                <span id="modal-event-deadline">28 Aug 2026, 10:00 am</span>
               </div>
             </div>
           </div>
