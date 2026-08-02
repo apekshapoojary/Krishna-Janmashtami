@@ -1667,6 +1667,23 @@ input, select, textarea {
   overflow: hidden;
   display: flex;
   flex-direction: row;
+  position: relative;
+}
+
+.event-modal-fullscreen-split::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('cute_little_krishna_1785341235752.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.1; /* Perfectly transparent watermark background */
+  pointer-events: none;
+  z-index: 1;
 }
 
 .modal-event-banner-container {
@@ -1689,19 +1706,24 @@ input, select, textarea {
 .modal-event-details-split {
   flex: 1.2;
   padding: 50px 5%;
-  background: rgba(255, 255, 255, 0.35);
+  background: transparent;
   border-right: 2px dashed rgba(212, 175, 55, 0.25);
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;
+  position: relative;
+  z-index: 2;
 }
 
 .modal-registration-form-split {
   flex: 1;
   padding: 50px 5%;
+  background: transparent;
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;
+  position: relative;
+  z-index: 2;
 }
 
 .event-info-box-split {
