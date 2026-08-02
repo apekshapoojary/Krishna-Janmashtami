@@ -341,16 +341,6 @@ function setupEventListeners() {
     }
   });
 
-  // Modal navigation step wizard buttons
-  document.getElementById("proceed-to-register-btn").addEventListener("click", () => {
-    document.getElementById("modal-details-screen").classList.add("hidden");
-    document.getElementById("modal-form-screen").classList.remove("hidden");
-  });
-
-  document.getElementById("back-to-details-btn").addEventListener("click", () => {
-    document.getElementById("modal-details-screen").classList.remove("hidden");
-    document.getElementById("modal-form-screen").classList.add("hidden");
-  });
 
   // Parallax 3D effect on mouse movement in the Hero arena
   const playground = document.querySelector(".hero-3d-playground");
@@ -591,7 +581,6 @@ function openRegistrationModal(compId) {
 
   document.getElementById("reg-comp-id").value = compId;
   document.getElementById("modal-comp-title").textContent = comp.title;
-  document.getElementById("modal-form-comp-title").textContent = "Register: " + comp.title;
   
   // Set event details banner image src
   const imageSrc = comp.image || "cute_little_krishna_1785341235752.jpg";
@@ -603,18 +592,12 @@ function openRegistrationModal(compId) {
   document.getElementById("modal-event-venue").textContent = comp.venue;
   document.getElementById("modal-event-rules").textContent = comp.rules;
   
-  // Reset screen states to show details screen first
-  document.getElementById("modal-details-screen").classList.remove("hidden");
-  document.getElementById("modal-form-screen").classList.add("hidden");
-  
   const modal = document.getElementById("registration-modal");
   modal.classList.remove("hidden");
 }
 
 function closeModal() {
   document.getElementById("registration-modal").classList.add("hidden");
-  document.getElementById("modal-details-screen").classList.remove("hidden");
-  document.getElementById("modal-form-screen").classList.add("hidden");
   document.getElementById("student-registration-form").reset();
 }
 
