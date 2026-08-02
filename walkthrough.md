@@ -47,7 +47,7 @@ We have successfully developed the interactive, traditional, and playful Krishna
 ### 1. Student View
 - **Wisdom Board**: Click the butter pot to break it and reveal modern interpretations of Bhagavad Gita teachings.
 - **Competitions list**: View active, approved events (fancy dress, dahi handi, etc.) with dates, rules, and cash prize information.
-- **Registration Form**: Click "Register Now" to open a scroll-like traditional form. Validates input and adds it to the user's registrations.
+- **Registration Form**: Click "Register Now" to open a beautifully styled **Split-Pane Event Details & Registration Interface**. The left side presents all details specified by the event organiser (Category, formatted Date & Time, Venue, Cash Prize, and full Rules & Guidelines); the right side houses the student enrollment form. The terms-and-conditions agreement checkbox has been removed for a cleaner signup flow.
 - **Memory Lane**: Filter and browse memories (with pictures and stories) of previous years' celebrations.
 
 ### 2. Organiser View

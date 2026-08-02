@@ -582,6 +582,22 @@ function openRegistrationModal(compId) {
   document.getElementById("reg-comp-id").value = compId;
   document.getElementById("modal-comp-title").textContent = comp.title;
   
+  // Populate additional split-pane details
+  document.getElementById("modal-event-category").textContent = comp.category || "Traditional";
+  document.getElementById("modal-event-date").textContent = formatDate(comp.date);
+  document.getElementById("modal-event-venue").textContent = comp.venue;
+  
+  const prizeItem = document.getElementById("modal-prize-item");
+  const eventPrize = document.getElementById("modal-event-prize");
+  if (comp.prize && comp.prize !== "N/A" && comp.prize.trim() !== "") {
+    eventPrize.textContent = comp.prize;
+    prizeItem.classList.remove("hidden");
+  } else {
+    prizeItem.classList.add("hidden");
+  }
+  
+  document.getElementById("modal-event-rules").textContent = comp.rules;
+  
   const modal = document.getElementById("registration-modal");
   modal.classList.remove("hidden");
 }

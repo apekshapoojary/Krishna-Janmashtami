@@ -494,52 +494,86 @@
 
     </main>
 
-    <!-- EVENT REGISTRATION MODAL -->
+    <!-- EVENT DETAILS & REGISTRATION MODAL -->
     <div id="registration-modal" class="modal-overlay hidden">
-      <div class="modal-card scroll-background">
+      <div class="modal-card scroll-background event-modal-split">
         <button id="close-modal-btn" class="close-modal-btn"><i class="fa-solid fa-circle-xmark"></i></button>
-        <div class="modal-header">
-          <span class="modal-subtitle">Enroll in Celebration</span>
-          <h3 id="modal-comp-title" class="modal-title">Competition Name</h3>
-          <div class="ornament"></div>
-        </div>
-        <form id="student-registration-form" class="traditional-form">
-          <input type="hidden" id="reg-comp-id">
+        
+        <!-- Left Side: Event Details -->
+        <div class="modal-event-details">
+          <div class="modal-header">
+            <span class="modal-subtitle" id="modal-event-category">Traditional Event</span>
+            <h3 id="modal-comp-title" class="modal-title">Competition Name</h3>
+            <div class="ornament"></div>
+          </div>
           
-          <div class="form-group">
-            <label for="reg-student-name">Student Full Name*</label>
-            <input type="text" id="reg-student-name" required placeholder="e.g., Apeksha K.">
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="reg-roll-no">Roll Number*</label>
-              <input type="text" id="reg-roll-no" required placeholder="e.g., BBH-2024-045">
+          <div class="event-info-box">
+            <div class="info-item">
+              <i class="fa-solid fa-calendar-days text-gold"></i>
+              <div>
+                <strong>Date & Time</strong>
+                <span id="modal-event-date">28 Aug 2026, 10:00 am</span>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="reg-class">Class & Section*</label>
-              <input type="text" id="reg-class" required placeholder="e.g., III B.Sc (CS)">
+            <div class="info-item">
+              <i class="fa-solid fa-map-location-dot text-gold"></i>
+              <div>
+                <strong>Venue</strong>
+                <span id="modal-event-venue">College Auditorium</span>
+              </div>
             </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="reg-email">Email Address*</label>
-              <input type="email" id="reg-email" required placeholder="e.g., apeksha@example.com">
-            </div>
-            <div class="form-group">
-              <label for="reg-phone">Phone Number*</label>
-              <input type="tel" id="reg-phone" required placeholder="e.g., 9876543210" pattern="[0-9]{10}">
+            <div class="info-item" id="modal-prize-item">
+              <i class="fa-solid fa-trophy text-gold"></i>
+              <div>
+                <strong>Prize Details</strong>
+                <span id="modal-event-prize">1st: ₹5000, 2nd: ₹3000</span>
+              </div>
             </div>
           </div>
 
-          <div class="form-checkbox">
-            <input type="checkbox" id="reg-agreement" required>
-            <label for="reg-agreement">I agree to abide by the rules and guidelines laid out for the event.*</label>
+          <div class="event-rules-section">
+            <h4><i class="fa-solid fa-scroll text-gold"></i> Rules & Guidelines</h4>
+            <p id="modal-event-rules">Competition rules and description details...</p>
           </div>
+        </div>
 
-          <button type="submit" class="submit-btn"><i class="fa-solid fa-om"></i> Complete Registration</button>
-        </form>
+        <!-- Right Side: Registration Form -->
+        <div class="modal-registration-form">
+          <h4 class="form-section-title"><i class="fa-solid fa-signature text-gold"></i> Student Registration</h4>
+          <form id="student-registration-form" class="traditional-form">
+            <input type="hidden" id="reg-comp-id">
+            
+            <div class="form-group">
+              <label for="reg-student-name">Student Full Name*</label>
+              <input type="text" id="reg-student-name" required placeholder="e.g., Apeksha K.">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-roll-no">Roll Number*</label>
+                <input type="text" id="reg-roll-no" required placeholder="e.g., BBH-2024-045">
+              </div>
+              <div class="form-group">
+                <label for="reg-class">Class & Section*</label>
+                <input type="text" id="reg-class" required placeholder="e.g., III B.Sc (CS)">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="reg-email">Email Address*</label>
+                <input type="email" id="reg-email" required placeholder="e.g., apeksha@example.com">
+              </div>
+              <div class="form-group">
+                <label for="reg-phone">Phone Number*</label>
+                <input type="tel" id="reg-phone" required placeholder="e.g., 9876543210" pattern="[0-9]{10}">
+              </div>
+            </div>
+
+            <button type="submit" class="submit-btn"><i class="fa-solid fa-om"></i> Complete Registration</button>
+          </form>
+        </div>
+
       </div>
     </div>
 

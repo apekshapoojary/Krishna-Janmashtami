@@ -1652,6 +1652,127 @@ input, select, textarea {
   animation: modal-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.event-modal-split {
+  display: flex;
+  flex-direction: row;
+  width: 95%;
+  max-width: 950px;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.modal-event-details {
+  flex: 1.1;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.35);
+  border-right: 2px dashed rgba(212, 175, 55, 0.25);
+  overflow-y: auto;
+  max-height: 85vh;
+}
+
+.modal-registration-form {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+  max-height: 85vh;
+}
+
+.event-info-box {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin: 25px 0;
+  padding: 18px;
+  background: rgba(255, 253, 240, 0.65);
+  border-radius: 12px;
+  border: 1px solid rgba(242, 146, 29, 0.18);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.info-item i {
+  font-size: 1.45rem;
+}
+
+.info-item div {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item strong {
+  font-size: 0.82rem;
+  color: var(--color-peacock-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item span {
+  font-size: 1rem;
+  color: var(--color-peacock-dark);
+  font-weight: 600;
+}
+
+.event-rules-section {
+  margin-top: 25px;
+}
+
+.event-rules-section h4 {
+  font-family: var(--font-heading);
+  color: var(--color-peacock-dark);
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.event-rules-section p {
+  font-family: var(--font-body);
+  color: var(--color-peacock-medium);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.form-section-title {
+  font-family: var(--font-heading);
+  color: var(--color-peacock-dark);
+  font-size: 1.25rem;
+  margin-top: 0;
+  margin-bottom: 25px;
+  border-bottom: 2px solid rgba(242, 146, 29, 0.2);
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 850px) {
+  .event-modal-split {
+    flex-direction: column;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .modal-event-details {
+    border-right: none;
+    border-bottom: 2px dashed rgba(212, 175, 55, 0.25);
+    padding: 35px 25px;
+    max-height: none;
+  }
+  
+  .modal-registration-form {
+    padding: 35px 25px;
+    max-height: none;
+  }
+}
+
 @keyframes modal-pop {
   from { transform: scale(0.85) translateY(30px); opacity: 0; }
   to { transform: scale(1) translateY(0); opacity: 1; }
