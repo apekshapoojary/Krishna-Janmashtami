@@ -690,18 +690,16 @@ function handleOrganiserAddCompetition(e) {
   e.preventDefault();
 
   const title = document.getElementById("comp-title").value;
-  const category = document.getElementById("comp-category").value;
   const date = document.getElementById("comp-date").value;
-  const prize = document.getElementById("comp-prize").value;
   const venue = document.getElementById("comp-venue").value;
   const rules = document.getElementById("comp-rules").value;
 
   const newComp = {
     id: "comp_" + Date.now(),
     title,
-    category,
+    category: "Traditional", // Default category
     date,
-    prize,
+    prize: "N/A", // Default prize
     venue,
     rules,
     approved: false // Proposals from organisers require admin approval

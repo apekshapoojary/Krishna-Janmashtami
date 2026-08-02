@@ -51,7 +51,7 @@ We have successfully developed the interactive, traditional, and playful Krishna
 - **Memory Lane**: Filter and browse memories (with pictures and stories) of previous years' celebrations.
 
 ### 2. Organiser View
-- **Create Competition**: Propose new events (e.g. Dahi Handi Sprint). Proposes them in a "Pending" state which requires Admin approval.
+- **Create Competition**: Propose new events (e.g. Dahi Handi Sprint). Removed category and cash prize options from the form for simplification, reorganizing the layout to pair event date and venue together in a clean column structure. Proposes them in a "Pending" state which requires Admin approval.
 - **Add Memory**: Share stories, year tags, and pictures of past achievements which update instantly on the student portal.
 - **Participant Rosters**: Select an active event and see a list of students registered, including contact details and registration dates.
 
