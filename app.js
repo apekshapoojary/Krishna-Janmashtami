@@ -13,8 +13,7 @@ const INITIAL_COMPETITIONS = [
     prize: "1st: ₹5000, 2nd: ₹3000",
     venue: "College Auditorium",
     rules: "Open to all students. Participants must bring their own costume, flute, and peacock crown. Presentation time limit is 3 minutes.",
-    approved: true,
-    createdBy: "organiser"
+    approved: true
   },
   {
     id: "comp_2",
@@ -25,8 +24,7 @@ const INITIAL_COMPETITIONS = [
     prize: "1st: ₹10000, 2nd: ₹5000",
     venue: "College Playground",
     rules: "Teams of 5. Maximum height is 3 human tiers. Safety harnesses and crash mats will be provided by the college. The team that breaks the pot in the shortest time wins.",
-    approved: true,
-    createdBy: "organiser"
+    approved: true
   },
   {
     id: "comp_3",
@@ -37,8 +35,7 @@ const INITIAL_COMPETITIONS = [
     prize: "1st: ₹3000, 2nd: ₹1500",
     venue: "Main Block Corridors",
     rules: "Individual or pairs. Time limit: 2 hours. Space provided: 4x4 feet. Stencils are not allowed. Bring your own organic colors.",
-    approved: true,
-    createdBy: "organiser"
+    approved: true
   },
   {
     id: "comp_4",
@@ -49,8 +46,7 @@ const INITIAL_COMPETITIONS = [
     prize: "1st: ₹4000, 2nd: ₹2000",
     venue: "Seminar Hall II",
     rules: "Time limit: 5 minutes. Classical or semi-classical Janmashtami tunes/bhajans are allowed. Shruti box is permitted.",
-    approved: true,
-    createdBy: "organiser"
+    approved: true
   }
 ];
 
@@ -146,8 +142,6 @@ bgMusicAudio.volume = 0.55; // moderate volume
 const DEFAULT_USERS = [
   { name: "Principal Admin", email: "admin@hegde.edu", username: "admin", password: "admin", role: "admin" },
   { name: "Prof. Hegde (HOD)", email: "organiser@hegde.edu", username: "organiser", password: "organiser", role: "organiser" },
-  { name: "Dr. Shetty (Sports HOD)", email: "organiser2@hegde.edu", username: "organiser2", password: "organiser2", role: "organiser" },
-  { name: "Prof. Shenoy (Music HOD)", email: "organiser3@hegde.edu", username: "organiser3", password: "organiser3", role: "organiser" },
   { name: "Apeksha K.", email: "student@hegde.edu", username: "student", password: "student", role: "student" }
 ];
 
@@ -438,18 +432,14 @@ function showUserProfile(user) {
   profileBadge.classList.remove("hidden");
 }
 
-function fillDemoCredentials(username) {
+function fillDemoCredentials(role) {
   const roleSelect = document.getElementById("login-role");
   const usernameInput = document.getElementById("login-username");
   const passwordInput = document.getElementById("login-password");
 
-  if (username.startsWith("organiser")) {
-    roleSelect.value = "organiser";
-  } else {
-    roleSelect.value = username;
-  }
-  usernameInput.value = username;
-  passwordInput.value = username;
+  roleSelect.value = role;
+  usernameInput.value = role; // demo username is same as role
+  passwordInput.value = role; // demo password is same as role
   
   // playFluteTone(392.00, 0.1, 0.25); // sound feedback
 }
@@ -693,73 +683,40 @@ function handleStudentRegistration(e) {
 function renderCompetitionsTables() {
   const organiserTbody = document.getElementById("organiser-competitions-table-body");
   const adminTbody = document.getElementById("admin-competitions-table-body");
-  const currentUser = JSON.parse(localStorage.getItem("utsav_current_user")) || { username: "organiser" };
 
-  // 1. Render Organiser Table (Only their own events)
-  if (organiserTbody) {
-    organiserTbody.innerHTML = "";
-    const organiserComps = competitions.filter(c => c.createdBy === currentUser.username);
-
-    if (organiserComps.length === 0) {
-      organiserTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-gray); padding: 15px;">No competitions proposed by you yet.</td></tr>`;
-    } else {
-      organiserComps.forEach(comp => {
-        const row = document.createElement("tr");
-        const statusBadge = comp.approved 
-          ? `<span class="badge badge-success" style="background-color: rgba(40,167,69,0.12); color: #28a745; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem;"><i class="fa-solid fa-check-circle"></i> Approved</span>`
-          : `<span class="badge badge-pending" style="background-color: rgba(253,126,20,0.12); color: #fd7e14; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem;"><i class="fa-solid fa-hourglass-half"></i> Pending</span>`;
-
-        row.innerHTML = `
-          <td style="font-weight: 700; color: var(--color-peacock-dark);">${comp.title}</td>
-          <td>${formatDate(comp.date)}</td>
-          <td>${comp.deadline ? formatDate(comp.deadline) : 'N/A'}</td>
-          <td>${comp.venue}</td>
-          <td>${statusBadge}</td>
-          <td>
-            <button class="remove-btn" onclick="removeCompetition('${comp.id}')" style="background-color: rgba(220,53,69,0.08); color: #dc3545; border: 1px solid rgba(220,53,69,0.25); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; font-weight: bold; font-family: var(--font-body);">
-              <i class="fa-solid fa-trash-can"></i> Remove
-            </button>
-          </td>
-        `;
-        organiserTbody.appendChild(row);
-      });
-    }
-  }
-
-  // 2. Render Admin Table (Each and every event, with Creator display name)
-  if (adminTbody) {
-    adminTbody.innerHTML = "";
+  const populate = (tbody) => {
+    if (!tbody) return;
+    tbody.innerHTML = "";
 
     if (competitions.length === 0) {
-      adminTbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--color-gray); padding: 15px;">No competitions proposed in the system.</td></tr>`;
-    } else {
-      const usersList = JSON.parse(localStorage.getItem("utsav_users")) || DEFAULT_USERS;
-      competitions.forEach(comp => {
-        const creator = usersList.find(u => u.username === comp.createdBy);
-        const creatorName = creator ? creator.name : (comp.createdBy || "System Seed");
-
-        const row = document.createElement("tr");
-        const statusBadge = comp.approved 
-          ? `<span class="badge badge-success" style="background-color: rgba(40,167,69,0.12); color: #28a745; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem;"><i class="fa-solid fa-check-circle"></i> Approved</span>`
-          : `<span class="badge badge-pending" style="background-color: rgba(253,126,20,0.12); color: #fd7e14; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem;"><i class="fa-solid fa-hourglass-half"></i> Pending</span>`;
-
-        row.innerHTML = `
-          <td style="font-weight: 700; color: var(--color-peacock-dark);">${comp.title}</td>
-          <td style="font-weight: 600; color: var(--color-marigold-orange);">${creatorName}</td>
-          <td>${formatDate(comp.date)}</td>
-          <td>${comp.deadline ? formatDate(comp.deadline) : 'N/A'}</td>
-          <td>${comp.venue}</td>
-          <td>${statusBadge}</td>
-          <td>
-            <button class="remove-btn" onclick="removeCompetition('${comp.id}')" style="background-color: rgba(220,53,69,0.08); color: #dc3545; border: 1px solid rgba(220,53,69,0.25); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; font-weight: bold; font-family: var(--font-body);">
-              <i class="fa-solid fa-trash-can"></i> Remove
-            </button>
-          </td>
-        `;
-        adminTbody.appendChild(row);
-      });
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-gray); padding: 15px;">No competitions proposed yet.</td></tr>`;
+      return;
     }
-  }
+
+    competitions.forEach(comp => {
+      const row = document.createElement("tr");
+      const statusBadge = comp.approved 
+        ? `<span class="badge badge-success" style="background-color: rgba(40,167,69,0.12); color: #28a745; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem;"><i class="fa-solid fa-check-circle"></i> Approved</span>`
+        : `<span class="badge badge-pending" style="background-color: rgba(253,126,20,0.12); color: #fd7e14; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem;"><i class="fa-solid fa-hourglass-half"></i> Pending</span>`;
+
+      row.innerHTML = `
+        <td style="font-weight: 700; color: var(--color-peacock-dark);">${comp.title}</td>
+        <td>${formatDate(comp.date)}</td>
+        <td>${comp.deadline ? formatDate(comp.deadline) : 'N/A'}</td>
+        <td>${comp.venue}</td>
+        <td>${statusBadge}</td>
+        <td>
+          <button class="remove-btn" onclick="removeCompetition('${comp.id}')" style="background-color: rgba(220,53,69,0.08); color: #dc3545; border: 1px solid rgba(220,53,69,0.25); padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; font-weight: bold; font-family: var(--font-body);">
+            <i class="fa-solid fa-trash-can"></i> Remove
+          </button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  };
+
+  populate(organiserTbody);
+  populate(adminTbody);
 }
 
 function removeCompetition(compId) {
@@ -787,14 +744,11 @@ function removeCompetition(compId) {
 window.removeCompetition = removeCompetition;
 
 function renderOrganiserPortal() {
-  const currentUser = JSON.parse(localStorage.getItem("utsav_current_user")) || { username: "organiser" };
-  
   // Populate the rosters select dropdown filter
   const selectComp = document.getElementById("organiser-comp-select");
   selectComp.innerHTML = "";
 
-  // Only show approved competitions created by this specific organiser
-  const approvedComps = competitions.filter(c => c.approved && c.createdBy === currentUser.username);
+  const approvedComps = competitions.filter(c => c.approved);
   
   if (approvedComps.length === 0) {
     const opt = document.createElement("option");
@@ -872,9 +826,6 @@ function handleOrganiserAddCompetition(e) {
   const rules = document.getElementById("comp-rules").value;
   
   const imageFile = document.getElementById("comp-image-file").files[0];
-  
-  const currentUser = JSON.parse(localStorage.getItem("utsav_current_user"));
-  const creatorUsername = currentUser ? currentUser.username : "organiser";
 
   readFileAsDataURL(imageFile).then((bannerDataUrl) => {
     const newComp = {
@@ -887,8 +838,7 @@ function handleOrganiserAddCompetition(e) {
       venue,
       rules,
       image: bannerDataUrl, // Store Base64 Data URL!
-      approved: false, // Proposals from organisers require admin approval
-      createdBy: creatorUsername // Save creator username to restrict visibility
+      approved: false // Proposals from organisers require admin approval
     };
 
     competitions.push(newComp);
